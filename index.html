@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071a14">
+<title>Dr. Dwibhashi Karteek | Digital Visiting Card</title>
+<style>
+:root {
+  --bg:#050806;
+  --panel:#0b1712;
+  --emerald:#0d3f2f;
+  --emerald2:#0b2f24;
+  --gold:#d8b25f;
+  --gold2:#f0d58e;
+  --text:#f8f5ea;
+  --muted:#c9c4b8;
+  --line:rgba(216,178,95,.30);
+}
+*{box-sizing:border-box}
+body {
+  margin:0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(28,92,67,.30), transparent 32%),
+    linear-gradient(180deg,#040705,#09110d 55%,#030504);
+  color:var(--text);
+}
+.wrap{max-width:520px;margin:0 auto;min-height:100vh;padding:18px 14px 34px}
+.card {
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(8,17,13,.97),rgba(4,8,6,.98));
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.46);
+}
+.hero{position:relative}
+.hero img{width:100%;display:block;aspect-ratio:4/4.3;object-fit:cover;object-position:center 38%}
+.hero:after {
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 54%,rgba(3,7,5,.96) 100%);
+}
+.brand {
+  position:absolute;left:18px;right:18px;bottom:15px;z-index:2;
+}
+.kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2);font-weight:700}
+h1{margin:6px 0 3px;font-family:Georgia,serif;font-size:31px;line-height:1.06;color:#fff7df}
+.credentials{color:var(--gold2);font-weight:700;font-size:15px}
+.role{margin-top:3px;font-size:13px;color:#eee6d2}
+.content{padding:20px}
+.clinic {
+  text-align:center;padding:5px 8px 18px;border-bottom:1px solid var(--line)
+}
+.clinic h2{font-family:Georgia,serif;color:var(--gold2);font-size:23px;line-height:1.13;margin:0 0 7px}
+.tagline{font-style:italic;color:#e7dec6;font-size:14px}
+.primary {
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 14px
+}
+.btn {
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  min-height:54px;border-radius:15px;text-decoration:none;font-weight:750;
+  border:1px solid rgba(240,213,142,.42);
+  color:#fff;background:linear-gradient(180deg,#124a37,#0b2e23);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+}
+.btn.gold{background:linear-gradient(180deg,#c79b44,#9a722c);color:#120f09}
+.btn.dark{background:linear-gradient(180deg,#141b18,#0b100e)}
+.btn.full{grid-column:1/-1}
+.section{padding:15px 0;border-top:1px solid var(--line)}
+.section:first-of-type{border-top:none}
+.title{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2);font-weight:800;margin-bottom:11px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip {
+  padding:8px 10px;border:1px solid rgba(216,178,95,.23);
+  border-radius:999px;background:rgba(13,63,47,.25);font-size:12px;color:#eee8db
+}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.info {
+  padding:12px;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid rgba(216,178,95,.14)
+}
+.info b{display:block;color:#f0d58e;font-size:12px;margin-bottom:4px}
+.info span{font-size:13px;color:#ddd7ca;line-height:1.45}
+.socials{display:grid;gap:9px}
+.socials a {
+  color:#f8f3e5;text-decoration:none;padding:12px 14px;border-radius:14px;
+  border:1px solid rgba(216,178,95,.16);background:rgba(255,255,255,.025)
+}
+.footer{text-align:center;color:#9f998c;font-size:11px;line-height:1.55;margin-top:18px}
+.small{font-size:11px;color:#bdb7aa}
+@media (max-width:380px) {
+  .primary,.grid{grid-template-columns:1fr}
+  .btn.full{grid-column:auto}
+  h1{font-size:27px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="hero">
+      <img alt="Dr. Dwibhashi Karteek" src="doctor.webp">
+      <div class="brand">
+        <div class="kicker">Founder & Chief Consultant</div>
+        <h1>Dr. Dwibhashi Karteek</h1>
+        <div class="credentials">MBBS</div>
+        <div class="role">Functional & Regenerative Medicine • Sexology • Medical Aesthetics • Acupuncture</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="clinic">
+        <h2>Sri Venkateswara Empire AI Clinic</h2>
+        <div class="tagline">Where Science Meets Personalized Healing</div>
+      </div>
+
+      <div class="primary">
+        <a class="btn gold full" href="https://calendar.app.google/ZHxvLVNKwEupZSoU6" target="_blank" rel="noopener">📅 BOOK APPOINTMENT</a>
+        <a class="btn gold full" href="https://wa.me/918374888794" target="_blank">💬 WhatsApp Appointment</a>
+        <a class="btn" href="tel:+918374888794">📞 Call</a>
+        <a class="btn" href="https://maps.app.goo.gl/p7RMab9iWzNukFEs9?g_st=ac" target="_blank">📍 Directions</a>
+        <a class="btn dark" href="mailto:srivenkateswaraempire@gmail.com">✉️ Email</a>
+        <button class="btn dark" style="cursor:pointer;font:inherit" onclick="saveContact()">👤 Save Contact</button>
+      </div>
+
+      <div class="section">
+        <div class="title">Clinical Areas</div>
+        <div class="chips">
+          <span class="chip">AI Hair Scan</span>
+          <span class="chip">AI Face Scan</span>
+          <span class="chip">AI Fertility Scan</span>
+          <span class="chip">AI Body Analysis</span>
+          <span class="chip">IntimaScan™</span>
+          <span class="chip">Men’s Wellness</span>
+          <span class="chip">Fertility</span>
+          <span class="chip">Medical Aesthetics</span>
+          <span class="chip">Cosmetology</span>
+          <span class="chip">Acupuncture & Electroacupuncture</span>
+          <span class="chip">Integrated Spine & Pain Care</span>
+          <span class="chip">Functional Medicine</span>
+          <span class="chip">Psychology & Hypnotherapy</span>
+          <span class="chip">Obesity & Metabolic Wellness</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="title">Connect</div>
+        <div class="socials">
+          <a href="https://www.instagram.com/empireaiclinic" target="_blank">Instagram — @empireaiclinic</a>
+          <a href="https://www.instagram.com/sexologist_drkarteek" target="_blank">Instagram — @sexologist_drkarteek</a>
+          <a href="https://youtube.com/@empireaiclinic" target="_blank">YouTube — @empireaiclinic</a>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="title">Clinic Information</div>
+        <div class="grid">
+          <div class="info">
+            <b>Address</b>
+            <span>D.No. 8-10-16/1, Sri Venkateswara Square, Kamaladevi Street, Gandhinagar Locality, Kakinada – 533004, Andhra Pradesh, India</span>
+          </div>
+          <div class="info">
+            <b>Contact</b>
+            <span>+91 83748 88794<br>srivenkateswaraempire@gmail.com</span>
+          </div>
+        </div>
+        <div class="small" style="margin-top:12px">GSTIN: 37BFBPD7288G2ZA</div>
+      </div>
+
+      <div class="footer">
+        Patient-facing digital visiting card • Tap any action above to connect.<br>
+        Clinical information does not replace an individual medical consultation.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function saveContact(){
+  const vcf = `BEGIN:VCARD
+VERSION:3.0
+N:Karteek;Dwibhashi;;Dr.;
+FN:Dr. Dwibhashi Karteek
+ORG:Sri Venkateswara Empire AI Clinic
+TITLE:Founder & Chief Consultant
+TEL;TYPE=CELL,VOICE:+918374888794
+EMAIL;TYPE=INTERNET:srivenkateswaraempire@gmail.com
+ADR;TYPE=WORK:;;D.No.8-10-16/1, Sri Venkateswara Square, Kamaladevi Street, Gandhinagar Locality;Kakinada;Andhra Pradesh;533004;India
+URL:https://www.instagram.com/empireaiclinic
+NOTE:Where Science Meets Personalized Healing
+END:VCARD
+`;
+  const blob = new Blob([vcf], {type: 'text/vcard;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Dr_Dwibhashi_Karteek.vcf';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+</script>
+</body>
+</html>
