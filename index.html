@@ -87,6 +87,12 @@ h1{margin:6px 0 3px;font-family:Georgia,serif;font-size:31px;line-height:1.06;co
 }
 .footer{text-align:center;color:#9f998c;font-size:11px;line-height:1.55;margin-top:18px}
 .small{font-size:11px;color:#bdb7aa}
+.navgroup{grid-column:1/-1;margin-top:7px;padding-top:12px;border-top:1px solid var(--line)}
+.navgroup:first-child{margin-top:0;padding-top:0;border-top:none}
+.navlabel{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2);font-weight:800;margin:0 0 9px}
+.navstack{display:grid;grid-template-columns:1fr;gap:9px}
+.btn .sub{display:block;font-size:10px;font-weight:600;opacity:.84;margin-top:2px;line-height:1.25}
+.btn.checkin{background:linear-gradient(180deg,#e0bd68,#a77a2e);color:#100f0a;border-color:#f0d58e;min-height:62px}
 @media (max-width:380px) {
   .primary,.grid{grid-template-columns:1fr}
   .btn.full{grid-column:auto}
@@ -114,14 +120,59 @@ h1{margin:6px 0 3px;font-family:Georgia,serif;font-size:31px;line-height:1.06;co
       </div>
 
       <div class="primary">
-        <a class="btn gold full" href="https://dwibhashikarteek-sketch.github.io/empire-ai-clinic/" target="_blank" rel="noopener">🔒 PRIVATE MEN'S WELLNESS CHECK</a>
-        <a class="btn gold full" href="https://dwibhashikarteek-sketch.github.io/dr-karteek-digital-card/sexology-intimate-wellness.html" target="_blank" rel="noopener">❤️ SEXOLOGY &amp; INTIMATE WELLNESS</a>
-        <a class="btn gold full" href="https://dwibhashikarteek-sketch.github.io/dr-karteek-digital-card/acupuncture-integrative-therapies.html" target="_blank" rel="noopener">🌿 ACUPUNCTURE & INTEGRATIVE THERAPIES</a>
-        <a class="btn gold full" href="https://dwibhashikarteek-sketch.github.io/dr-karteek-digital-card/hypnotherapy-mind-wellness.html" target="_blank" rel="noopener">🧠 HYPNOTHERAPY & MIND WELLNESS</a>
-        <a class="btn gold full" href="https://calendar.app.google/ZHxvLVNKwEupZSoU6" target="_blank" rel="noopener">📅 BOOK APPOINTMENT</a>
-        <a class="btn gold full" href="https://wa.me/918374888794" target="_blank">💬 WhatsApp Appointment</a>
+
+        <div class="navgroup">
+          <div class="navlabel">Arrive & Book</div>
+          <div class="navstack">
+            <a class="btn checkin" href="empire-smart-check-in.html">📲 EMPIRE SMART CHECK-IN™<br><span class="sub">Arrived at the clinic? Check in here ›</span></a>
+            <a class="btn gold" href="https://calendar.app.google/ZHxvLVNKwEupZSoU6" target="_blank" rel="noopener">📅 BOOK APPOINTMENT</a>
+          </div>
+        </div>
+
+        <div class="navgroup">
+          <div class="navlabel">Clinical Services</div>
+          <div class="navstack">
+            <a class="btn gold" href="sexology-intimate-wellness.html">❤️ SEXOLOGY &amp; INTIMATE WELLNESS</a>
+            <a class="btn gold" href="acupuncture-integrative-therapies.html">🌿 ACUPUNCTURE &amp; INTEGRATIVE THERAPIES</a>
+            <a class="btn gold" href="hypnotherapy-mind-wellness.html">🧠 HYPNOTHERAPY &amp; MIND WELLNESS</a>
+            <a class="btn gold" href="empire-signature-korean-aesthetics.html">✨ KOREAN AESTHETICS</a>
+            <a class="btn gold" href="obesity-metabolic-wellness-body-sculpting.html">⚖️ OBESITY &amp; BODY TRANSFORMATION</a>
+          </div>
+        </div>
+
+        <div class="navgroup">
+          <div class="navlabel">Signature Programs & AI</div>
+          <div class="navstack">
+            <a class="btn gold" href="empire-90.html">👑 EMPIRE 90™<br><span class="sub">Physician-Guided 90-Day Transformation Programs ›</span></a>
+            <a class="btn gold" href="empire-ai-health-assessments.html">🤖 EMPIRE AI HEALTH ASSESSMENTS<br><span class="sub">AI-Assisted Screening • Personalized Insights ›</span></a>
+            <a class="btn gold" href="https://dwibhashikarteek-sketch.github.io/empire-ai-clinic/" target="_blank" rel="noopener">🔒 PRIVATE MEN'S WELLNESS CHECK</a>
+          </div>
+        </div>
+
+        <div class="navgroup">
+          <div class="navlabel">Learn & Trust</div>
+          <div class="navstack">
+            <a class="btn" href="meet-dr-dwibhashi-karteek.html">👨‍⚕️ MEET DR. DWIBHASHI KARTEEK</a>
+            <a class="btn" href="patient-education-hub.html">📚 PATIENT EDUCATION HUB</a>
+            <a class="btn" href="patient-faq.html">❓ PATIENT FAQ</a>
+            <a class="btn" href="empire-ai-academy.html">🎓 EMPIRE AI ACADEMY<br><span class="sub">Courses • Programs • Professional Learning ›</span></a>
+          </div>
+        </div>
+
+        <div class="navgroup">
+          <div class="navlabel">Visit & Experience</div>
+          <div class="navstack">
+            <a class="btn" href="visit-empire-ai-clinic.html">📍 VISIT EMPIRE AI CLINIC</a>
+            <a class="btn" href="empire-patient-experience.html">⭐ EMPIRE PATIENT EXPERIENCE™<br><span class="sub">Private feedback • Your experience helps us improve ›</span></a>
+          </div>
+        </div>
+
+        <div class="navgroup">
+          <div class="navlabel">Contact & Card</div>
+        </div>
+        <a class="btn gold full" href="https://wa.me/918374888794" target="_blank" rel="noopener">💬 WhatsApp Appointment</a>
         <a class="btn" href="tel:+918374888794">📞 Call</a>
-        <a class="btn" href="https://maps.app.goo.gl/p7RMab9iWzNukFEs9?g_st=ac" target="_blank">📍 Directions</a>
+        <a class="btn" href="https://maps.app.goo.gl/p7RMab9iWzNukFEs9?g_st=ac" target="_blank" rel="noopener">📍 Directions</a>
         <a class="btn dark" href="mailto:srivenkateswaraempire@gmail.com">✉️ Email</a>
         <button class="btn dark" style="cursor:pointer;font:inherit" onclick="saveContact()">👤 Save Contact</button>
         <a class="btn full" href="https://canva.link/zfdv51d6kni4twd" target="_blank" rel="noopener">🌐 VISIT CLINIC WEBSITE</a>
@@ -151,9 +202,13 @@ h1{margin:6px 0 3px;font-family:Georgia,serif;font-size:31px;line-height:1.06;co
       <div class="section">
         <div class="title">Connect</div>
         <div class="socials">
-          <a href="https://www.instagram.com/empireaiclinic" target="_blank">Instagram — @empireaiclinic</a>
-          <a href="https://www.instagram.com/sexologist_drkarteek" target="_blank">Instagram — @sexologist_drkarteek</a>
-          <a href="https://youtube.com/@empireaiclinic" target="_blank">YouTube — @empireaiclinic</a>
+          <a href="https://www.instagram.com/empireaiclinic/" target="_blank">Instagram — @empireaiclinic</a>
+          <a href="https://www.instagram.com/sexologist_drkarteek/" target="_blank">Instagram — @sexologist_drkarteek</a>
+          <a href="https://www.instagram.com/drdwibhashiacupuncture/" target="_blank">Instagram — @drdwibhashiacupuncture</a>
+          <a href="https://www.instagram.com/drkarteekhypnosis/" target="_blank">Instagram — @drkarteekhypnosis</a>
+          <a href="https://www.youtube.com/@empireaiclinic" target="_blank">YouTube — @empireaiclinic</a>
+          <a href="https://www.youtube.com/@DR.DWIBHASHIACUPUNCTUREN-nx3hd" target="_blank">YouTube — Dr. Dwibhashi Acupuncture</a>
+          <a href="https://www.youtube.com/@dwibhashikarteek" target="_blank">YouTube — @dwibhashikarteek</a>
         </div>
       </div>
 
