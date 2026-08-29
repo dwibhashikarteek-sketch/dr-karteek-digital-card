@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Empire Token Desk™ | Doctor Dashboard</title>
+<style>
+:root{--bg:#061612;--card:#0d211b;--gold:#d8b66a;--gold2:#f1d895;--text:#f7f4ea;--muted:#b8c5be;--line:rgba(216,182,106,.28);--green:#bfe7cf}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top,#15382d,#071813 42%,#04110e);color:var(--text);font-family:Georgia,"Times New Roman",serif;min-height:100vh;padding:18px 12px 90px}
+.wrap{max-width:900px;margin:auto}
+.brand{text-align:center;margin-bottom:16px}
+.badge{display:inline-block;padding:6px 11px;border:1px solid var(--line);border-radius:999px;color:var(--gold2);font-size:11px;letter-spacing:.12em}
+h1{color:var(--gold2);font-size:30px;margin:10px 0 4px}
+.sub{color:var(--muted);font-size:14px}
+.card{background:linear-gradient(180deg,rgba(17,48,39,.96),rgba(7,23,19,.96));border:1px solid var(--line);border-radius:20px;padding:16px;margin-top:14px}
+.controls{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:end}
+label{display:block;color:#eadfbd;font-size:13px;margin-bottom:6px}
+input,button,select{font:inherit}
+input{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:#071a15;color:var(--text)}
+button{padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#102c24;color:var(--text);font-weight:700;cursor:pointer}
+button.primary{background:linear-gradient(180deg,#e4ca86,#b88f3c);color:#102016}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.stat{padding:12px;border:1px solid var(--line);border-radius:14px;text-align:center;background:#081a15}
+.stat b{display:block;color:var(--gold2);font-size:24px}
+.list{display:grid;gap:10px;margin-top:12px}
+.patient{border:1px solid var(--line);border-radius:16px;padding:14px;background:#081a15}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.token{font-size:24px;color:var(--gold2);font-weight:700}
+.name{font-size:18px;font-weight:700;margin-top:4px}
+.meta{color:var(--muted);font-size:13px;line-height:1.5;margin-top:5px}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.actions button{font-size:13px;padding:10px 8px}
+.waiting{color:#f0d796} .consulting{color:#bfe7cf} .completed{color:#9faea7}
+.empty{text-align:center;color:var(--muted);padding:26px 8px}
+.note{color:#9fb0a8;font-size:12px;line-height:1.5;margin-top:10px}
+@media(max-width:620px){.controls{grid-template-columns:1fr 1fr}.controls .pin{grid-column:1/-1}.stats{grid-template-columns:repeat(3,1fr)}.actions{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="badge">SRI VENKATESWARA EMPIRE AI CLINIC</div>
+    <h1>Empire Token Desk™</h1>
+    <div class="sub">Doctor-Side Smart Check-In Dashboard</div>
+  </div>
+
+  <div class="card">
+    <div class="controls">
+      <div class="pin">
+        <label for="pin">Admin PIN</label>
+        <input id="pin" type="password" inputmode="numeric" placeholder="Enter PIN">
+      </div>
+      <button class="primary" onclick="loadQueue()">Refresh Queue</button>
+      <button onclick="showAll = !showAll; loadQueue()">Toggle Completed</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="waitingCount">0</b>Waiting</div>
+      <div class="stat"><b id="consultingCount">0</b>In Consultation</div>
+      <div class="stat"><b id="completedCount">0</b>Completed</div>
+    </div>
+    <div class="note">Keep this dashboard private. It is intended for clinic use, not for patients.</div>
+  </div>
+
+  <div class="card">
+    <div id="queue" class="list"><div class="empty">Enter the Admin PIN and press Refresh Queue.</div></div>
+  </div>
+</div>
+
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbyNj-Yxv_yyARgJS9ghpdWJG2LTEg35Cx1jIZOBlR1jDQ4EJbN1LhbleNQ6kARNO0pK/exec";
+let showAll = false;
+
+async function api(payload){
+  const res = await fetch(ENDPOINT, {
+    method:"POST",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify(payload)
+  });
+  return await res.json();
+}
+
+async function loadQueue(){
+  const pin = document.getElementById("pin").value.trim();
+  if(!pin) return alert("Enter Admin PIN.");
+  const q = document.getElementById("queue");
+  q.innerHTML = '<div class="empty">Loading queue…</div>';
+  try{
+    const data = await api({action:"list", pin});
+    if(data.status !== "success") throw new Error(data.message || "Unable to load");
+    render(data.items || []);
+  }catch(e){
+    q.innerHTML = '<div class="empty">Unable to load queue. Check the PIN and deployment.</div>';
+  }
+}
+
+function render(items){
+  const waiting = items.filter(x=>x.status==="Waiting").length;
+  const consulting = items.filter(x=>x.status==="In Consultation").length;
+  const completed = items.filter(x=>x.status==="Completed").length;
+  document.getElementById("waitingCount").textContent = waiting;
+  document.getElementById("consultingCount").textContent = consulting;
+  document.getElementById("completedCount").textContent = completed;
+
+  let visible = showAll ? items : items.filter(x=>x.status!=="Completed");
+  const q = document.getElementById("queue");
+  if(!visible.length){ q.innerHTML='<div class="empty">No active patients in the queue.</div>'; return; }
+
+  q.innerHTML = visible.map(x=>`
+    <div class="patient">
+      <div class="top">
+        <div>
+          <div class="token">${escapeHtml(x.token)}</div>
+          <div class="name">${escapeHtml(x.name)}</div>
+        </div>
+        <div class="${x.status==='Waiting'?'waiting':x.status==='In Consultation'?'consulting':'completed'}">${escapeHtml(x.status)}</div>
+      </div>
+      <div class="meta">
+        ${escapeHtml(x.visitType)} • ${escapeHtml(x.visitReason)}<br>
+        Mobile ending: ${escapeHtml(x.last4)}${x.appointmentTime ? ' • Appointment: '+escapeHtml(x.appointmentTime) : ''}
+      </div>
+      <div class="actions">
+        <button onclick="setStatus('${x.token}','Waiting')">Waiting</button>
+        <button class="primary" onclick="setStatus('${x.token}','In Consultation')">Call / In Consultation</button>
+        <button onclick="setStatus('${x.token}','Completed')">Completed</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function setStatus(token,status){
+  const pin = document.getElementById("pin").value.trim();
+  if(!pin) return alert("Enter Admin PIN.");
+  try{
+    const data = await api({action:"update", pin, token, newStatus:status});
+    if(data.status !== "success") throw new Error(data.message || "Update failed");
+    loadQueue();
+  }catch(e){
+    alert("Status could not be updated.");
+  }
+}
+
+function escapeHtml(s){
+  return String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+</script>
+</body>
+</html>
