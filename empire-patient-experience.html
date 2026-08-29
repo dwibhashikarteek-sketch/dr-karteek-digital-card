@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07110d">
+<title>Empire Patient Experience™ | Sri Venkateswara Empire AI Clinic</title>
+<style>
+:root{--gold:#d7b467;--gold2:#f1d995;--text:#f8f3e9;--muted:#b9c5be;--line:rgba(215,180,103,.25);--green:#10271e}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 90% 0,rgba(31,98,73,.26),transparent 32%),linear-gradient(180deg,#050c09,#071510 55%,#050d0a);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.wrap{max-width:700px;margin:auto;padding:18px 16px 110px}
+.clinic{font:19px Georgia;color:var(--gold2)}.tag{font-size:10px;color:var(--muted);letter-spacing:.8px;margin:5px 0 18px}
+.hero,.card{background:linear-gradient(145deg,rgba(16,39,30,.98),rgba(7,22,17,.98));border:1px solid var(--line);border-radius:22px;padding:20px;margin-bottom:12px}
+.hero{text-align:center;padding:27px 20px}.hero h1{font:600 30px Georgia;color:var(--gold2);margin:8px 0}.hero h2{font:500 15px Georgia;margin:0 0 8px}.hero p,.card p{color:var(--muted);font-size:12px;line-height:1.6}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:5px 9px;font-size:9px;color:var(--gold2)}
+.title{font:21px Georgia;color:var(--gold2);margin:24px 2px 12px}
+label{display:block;font-size:12px;margin:13px 0 6px;color:#eee6d6}
+select,textarea,input[type=text]{width:100%;background:#07150f;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px;font:13px inherit}
+textarea{min-height:100px;resize:vertical}
+.stars{display:flex;gap:7px;flex-wrap:wrap}
+.stars label{margin:0}.stars input{display:none}.stars span{display:block;border:1px solid var(--line);border-radius:12px;padding:9px 12px;cursor:pointer;color:var(--gold2)}
+.stars input:checked+span{background:var(--gold);color:#142018;font-weight:800}
+.check{display:flex;gap:9px;align-items:flex-start;color:var(--muted);font-size:11px;line-height:1.5;margin-top:13px}.check input{margin-top:3px}
+.btn{width:100%;border:0;border-radius:14px;padding:14px 12px;font-weight:800;cursor:pointer;text-decoration:none;text-align:center;display:block;font-size:12px}
+.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#142018}.secondary{background:#0a1c15;color:var(--text);border:1px solid var(--line)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.notice{padding:14px;border:1px solid var(--line);border-radius:15px;color:#aebcb4;font-size:10.5px;line-height:1.55;background:#06140e;margin-top:12px}
+#thanks{display:none;text-align:center}.small{font-size:10px;color:#8fa096;line-height:1.5}
+.bottom{position:fixed;left:0;right:0;bottom:0;background:rgba(4,13,9,.97);border-top:1px solid rgba(215,180,103,.18);padding:9px 12px 12px}.bottom-in{max-width:700px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr)}.bottom a{text-align:center;text-decoration:none;color:var(--muted);font-size:10px;padding:5px}.bottom b{display:block;color:var(--gold2);font-size:18px}
+@media(max-width:520px){.actions{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="clinic">Sri Venkateswara Empire AI Clinic</div>
+<div class="tag">WHERE SCIENCE MEETS PERSONALIZED HEALING</div>
+
+<section class="hero">
+<span class="badge">PRIVATE • GENUINE • PATIENT-LED</span>
+<div style="font-size:30px;margin-top:10px">⭐</div>
+<h1>Empire Patient Experience™</h1>
+<h2>Your Experience Helps Us Improve</h2>
+<p>This feedback form is designed to understand your clinic experience. Positive, neutral and critical feedback are equally welcome.</p>
+</section>
+
+<form id="feedbackForm">
+<div class="title">Your Experience</div>
+
+<section class="card">
+<label>Overall clinic experience *</label>
+<div class="stars">
+<label><input type="radio" name="overall" value="1" required><span>★ 1</span></label>
+<label><input type="radio" name="overall" value="2"><span>★ 2</span></label>
+<label><input type="radio" name="overall" value="3"><span>★ 3</span></label>
+<label><input type="radio" name="overall" value="4"><span>★ 4</span></label>
+<label><input type="radio" name="overall" value="5"><span>★ 5</span></label>
+</div>
+
+<label>Doctor communication</label>
+<select name="communication"><option value="">Select</option><option>Excellent</option><option>Very Good</option><option>Good</option><option>Fair</option><option>Needs Improvement</option></select>
+
+<label>Privacy & confidentiality</label>
+<select name="privacy"><option value="">Select</option><option>Excellent</option><option>Very Good</option><option>Good</option><option>Fair</option><option>Needs Improvement</option></select>
+
+<label>Clinic cleanliness & comfort</label>
+<select name="cleanliness"><option value="">Select</option><option>Excellent</option><option>Very Good</option><option>Good</option><option>Fair</option><option>Needs Improvement</option></select>
+
+<label>Appointment / visit experience</label>
+<select name="appointment"><option value="">Select</option><option>Excellent</option><option>Very Good</option><option>Good</option><option>Fair</option><option>Needs Improvement</option></select>
+
+<label>Would you recommend the clinic?</label>
+<select name="recommend"><option value="">Select</option><option>Yes</option><option>Maybe</option><option>No</option></select>
+
+<label>What did we do well?</label>
+<textarea name="positive" placeholder="Optional"></textarea>
+
+<label>What could we improve?</label>
+<textarea name="improve" placeholder="Optional — constructive criticism is welcome"></textarea>
+
+<label>Additional comments</label>
+<textarea name="comments" placeholder="Optional"></textarea>
+</section>
+
+<div class="title">Privacy & Publication Choice</div>
+<section class="card">
+<p>Your feedback is private by default. It will not be displayed publicly unless you explicitly permit publication.</p>
+
+<label>May the clinic display your feedback publicly?</label>
+<select name="publicConsent" id="publicConsent">
+<option value="No">No — keep my feedback private</option>
+<option value="Yes">Yes — I consent to publication</option>
+</select>
+
+<label>If published, how should you be identified?</label>
+<select name="displayPreference">
+<option>Anonymous Patient</option>
+<option>Initials only</option>
+<option>First name only</option>
+<option>Full name</option>
+</select>
+
+<label>Name / initials for publication, only if you consented</label>
+<input type="text" name="displayName" placeholder="Optional">
+
+<label class="check"><input type="checkbox" required> <span>I confirm that this feedback reflects my genuine experience. I understand that I should not include sensitive personal or medical information that I do not want stored in the feedback system.</span></label>
+</section>
+
+<section class="card">
+<button class="btn primary" type="submit">Submit Private Feedback</button>
+<p class="small">The form interface is ready. To store submissions automatically, connect the endpoint in the configuration section of this HTML file to your Google Apps Script web app.</p>
+</section>
+</form>
+
+<section class="card" id="thanks">
+<h2 style="font:22px Georgia;color:var(--gold2)">Thank You</h2>
+<p>Your feedback helps Sri Venkateswara Empire AI Clinic improve the patient experience.</p>
+<div class="actions">
+<a class="btn secondary" href="https://maps.app.goo.gl/p7RMab9iWzNukFEs9?g_st=ac" target="_blank" rel="noopener">Google Business Profile</a>
+<a class="btn secondary" href="https://dwibhashikarteek-sketch.github.io/dr-karteek-digital-card/">Digital Card</a>
+</div>
+<p class="small">Google feedback is completely optional. No discount, benefit or treatment preference is offered in exchange for a review, and this option is shown regardless of the rating submitted above.</p>
+</section>
+
+<div class="notice"><b style="color:var(--gold2)">Privacy:</b> Please avoid entering diagnoses, sexual-health details, investigation results, photographs or other sensitive clinical information in free-text feedback. For a clinical concern, contact the clinic privately.</div>
+<div class="notice">Consented testimonials, if displayed publicly, represent individual patient experiences and do not guarantee similar treatment or health outcomes.</div>
+</main>
+
+<nav class="bottom"><div class="bottom-in">
+<a href="tel:+918374888794"><b>☎</b>Call</a>
+<a href="https://calendar.app.google/ZHxvLVNKwEupZSoU6" target="_blank"><b>◫</b>Book</a>
+<a href="https://wa.me/918374888794" target="_blank"><b>✦</b>WhatsApp</a>
+<a href="https://dwibhashikarteek-sketch.github.io/dr-karteek-digital-card/"><b>⌂</b>Digital Card</a>
+</div></nav>
+
+<script>
+// Paste your deployed Google Apps Script Web App URL here after setup.
+// Example: const ENDPOINT = "https://script.google.com/macros/s/.../exec";
+const ENDPOINT = "";
+
+document.getElementById("feedbackForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+  if(!ENDPOINT){
+    alert("The feedback page is ready, but secure submission storage has not yet been connected. Connect the Google Apps Script endpoint before giving this form to patients.");
+    return;
+  }
+  const btn=this.querySelector('button[type="submit"]');
+  btn.disabled=true; btn.textContent="Submitting…";
+  try{
+    const data=Object.fromEntries(new FormData(this).entries());
+    data.submittedAt=new Date().toISOString();
+    await fetch(ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(data)});
+    this.style.display="none";
+    document.getElementById("thanks").style.display="block";
+    window.scrollTo({top:0,behavior:"smooth"});
+  }catch(err){
+    alert("Feedback could not be submitted. Please try again.");
+  }finally{
+    btn.disabled=false; btn.textContent="Submit Private Feedback";
+  }
+});
+</script>
+</body>
+</html>
