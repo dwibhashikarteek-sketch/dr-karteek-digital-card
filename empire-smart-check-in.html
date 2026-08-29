@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Empire Smart Check-In™ | Sri Venkateswara Empire AI Clinic</title>
+<style>
+:root{
+  --bg:#061612; --bg2:#0b241d; --card:#0c1f1a; --gold:#d8b66a; --gold2:#f0d796;
+  --text:#f6f3ea; --muted:#bfc9c3; --line:rgba(216,182,106,.28); --ok:#bfe7cf;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Georgia,"Times New Roman",serif;color:var(--text);
+  background:radial-gradient(circle at top,#15382d 0,#081c17 38%,#04110e 100%);
+  min-height:100vh;padding:22px 14px 92px;
+}
+.wrap{max-width:720px;margin:auto}
+.brand{text-align:center;margin-bottom:18px}
+.badge{display:inline-block;border:1px solid var(--line);color:var(--gold2);padding:6px 12px;border-radius:999px;font-size:12px;letter-spacing:.12em}
+h1{margin:12px 0 6px;color:var(--gold2);font-size:32px;line-height:1.05}
+.sub{color:var(--muted);font-size:15px;line-height:1.5}
+.card{
+  background:linear-gradient(180deg,rgba(18,48,39,.96),rgba(7,24,19,.96));
+  border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.28)
+}
+.progress{display:flex;gap:8px;margin-bottom:18px}
+.dot{height:5px;flex:1;border-radius:999px;background:rgba(255,255,255,.12)}
+.dot.on{background:var(--gold)}
+h2{color:var(--gold2);font-size:22px;margin:0 0 10px}
+p{color:var(--muted);line-height:1.55}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+button,.btn{
+  appearance:none;border:1px solid var(--line);border-radius:14px;padding:14px 16px;
+  background:#102c24;color:var(--text);font:inherit;font-weight:700;cursor:pointer;text-align:center
+}
+button.primary,.btn.primary{background:linear-gradient(180deg,#e3c77f,#b78d38);color:#102016;border-color:#e8cf8e}
+button:hover,.btn:hover{filter:brightness(1.06)}
+label{display:block;margin:14px 0 7px;color:#efe5c8;font-size:14px}
+input,select,textarea{
+  width:100%;background:#071a15;color:var(--text);border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;padding:13px 12px;font:inherit;outline:none
+}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.note{font-size:12px;color:#9fb0a8;margin-top:8px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hidden{display:none}
+.success{text-align:center;padding:10px 0}
+.token{
+  margin:18px auto 10px;width:max-content;min-width:160px;padding:14px 20px;border-radius:18px;
+  border:1px solid var(--line);background:#081a15;color:var(--gold2);font-size:34px;font-weight:700;letter-spacing:.04em
+}
+.status{color:var(--ok);font-weight:700}
+.footer{text-align:center;margin-top:14px;color:#94a59d;font-size:12px;line-height:1.5}
+.bottom{
+  position:fixed;left:0;right:0;bottom:0;background:rgba(3,14,11,.96);backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);padding:9px 10px calc(9px + env(safe-area-inset-bottom));
+  display:flex;gap:8px;justify-content:center
+}
+.bottom a{flex:1;max-width:220px;text-decoration:none;color:#f5ebcf;border:1px solid var(--line);
+  border-radius:12px;padding:11px 8px;text-align:center;font-size:13px}
+@media(max-width:520px){h1{font-size:28px}.row,.choice{grid-template-columns:1fr}.card{padding:17px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="badge">SRI VENKATESWARA EMPIRE AI CLINIC</div>
+    <h1>Empire Smart Check-In™</h1>
+    <div class="sub">Fast • Private • Reception-Free Arrival</div>
+  </div>
+
+  <div class="card">
+    <div id="step1">
+      <div class="progress"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+      <h2>Welcome</h2>
+      <p>Have you already booked an appointment for today?</p>
+      <div class="choice">
+        <button class="primary" onclick="chooseType('appointment')">Yes — I Have an Appointment</button>
+        <button onclick="chooseType('walkin')">No — I Am a Walk-In</button>
+      </div>
+    </div>
+
+    <form id="checkinForm" class="hidden">
+      <div class="progress"><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
+      <h2 id="formTitle">Check In</h2>
+      <input type="hidden" id="visitType" name="visitType">
+
+      <label for="name">Full name</label>
+      <input id="name" name="name" autocomplete="name" required placeholder="Enter full name">
+
+      <label for="last4">Last 4 digits of mobile number</label>
+      <input id="last4" name="last4" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" required placeholder="e.g. 8794">
+      <div class="note">Used only to help identify your booking. Please do not enter medical details here.</div>
+
+      <div id="appointmentFields" class="hidden">
+        <label for="appointmentTime">Appointment time</label>
+        <input id="appointmentTime" name="appointmentTime" type="time">
+      </div>
+
+      <label for="visitReason">Visit category</label>
+      <select id="visitReason" name="visitReason" required>
+        <option value="">Select</option>
+        <option>Consultation</option>
+        <option>Follow-up</option>
+        <option>Procedure / Therapy</option>
+        <option>AI Assessment</option>
+        <option>Other</option>
+      </select>
+
+      <label>
+        <input id="consent" type="checkbox" required style="width:auto;margin-right:8px">
+        I confirm that I am physically present at the clinic and wish to check in.
+      </label>
+
+      <div class="row" style="margin-top:18px">
+        <button type="button" onclick="goBack()">Back</button>
+        <button type="submit" class="primary">Check In Now</button>
+      </div>
+      <div class="note" style="margin-top:14px">Appointment patients may be prioritized according to the clinic schedule and clinical circumstances.</div>
+    </form>
+
+    <div id="success" class="hidden success">
+      <div class="progress"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+      <h2>Check-In Successful</h2>
+      <p class="status">You are now checked in.</p>
+      <div class="token" id="token">—</div>
+      <p id="successText">Please take a seat. You will be called when the doctor is ready.</p>
+      <p class="note">Keep this page open if you want to remember your token number.</p>
+      <button onclick="resetForm()">New Check-In</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    Please avoid entering diagnoses, sexual-health details, investigation results or other sensitive medical information on this check-in page.
+  </div>
+</div>
+
+<div class="bottom">
+  <a href="tel:+918374888794">📞 Call</a>
+  <a href="https://wa.me/918374888794">💬 WhatsApp</a>
+  <a href="index.html">🏠 Digital Card</a>
+</div>
+
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbyNj-Yxv_yyARgJS9ghpdWJG2LTEg35Cx1jIZOBlR1jDQ4EJbN1LhbleNQ6kARNO0pK/exec";
+let selectedType = "";
+
+function chooseType(type){
+  selectedType = type;
+  document.getElementById("visitType").value = type;
+  document.getElementById("step1").classList.add("hidden");
+  document.getElementById("checkinForm").classList.remove("hidden");
+  const isAppt = type === "appointment";
+  document.getElementById("appointmentFields").classList.toggle("hidden", !isAppt);
+  document.getElementById("formTitle").textContent = isAppt ? "Appointment Check-In" : "Walk-In Check-In";
+}
+function goBack(){
+  document.getElementById("checkinForm").classList.add("hidden");
+  document.getElementById("step1").classList.remove("hidden");
+}
+function resetForm(){
+  document.getElementById("checkinForm").reset();
+  document.getElementById("success").classList.add("hidden");
+  document.getElementById("step1").classList.remove("hidden");
+}
+document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  if(!ENDPOINT){
+    alert("Smart Check-In backend is not connected yet.");
+    return;
+  }
+  const btn = e.submitter;
+  btn.disabled = true;
+  btn.textContent = "Checking In…";
+
+  const payload = {
+    visitType: document.getElementById("visitType").value,
+    name: document.getElementById("name").value.trim(),
+    last4: document.getElementById("last4").value.trim(),
+    appointmentTime: document.getElementById("appointmentTime").value,
+    visitReason: document.getElementById("visitReason").value
+  };
+
+  try{
+    const res = await fetch(ENDPOINT,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if(data.status !== "success") throw new Error(data.message || "Check-in failed");
+    document.getElementById("checkinForm").classList.add("hidden");
+    document.getElementById("token").textContent = data.token || "CHECKED IN";
+    document.getElementById("success").classList.remove("hidden");
+  }catch(err){
+    alert("Check-in could not be completed. Please try again or contact the clinic.");
+  }finally{
+    btn.disabled = false;
+    btn.textContent = "Check In Now";
+  }
+});
+</script>
+</body>
+</html>
