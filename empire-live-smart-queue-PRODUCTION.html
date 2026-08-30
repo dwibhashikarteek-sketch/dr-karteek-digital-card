@@ -107,13 +107,37 @@ const ENDPOINT="https://script.google.com/macros/s/AKfycbyNj-Yxv_yyARgJS9ghpdWJG
 let token="",last4="",pollHandle=null,lastState="",lastSignature="",responseBusy=false;
 
 const qs=new URLSearchParams(location.search);
-if(qs.get("token")) document.getElementById("tokenInput").value=qs.get("token").toUpperCase();
-if(qs.get("last4")) document.getElementById("last4Input").value=qs.get("last4");
+
+// Preferred Smart Check-In handoff: same-tab sessionStorage.
+// This avoids placing mobile digits in the browser URL.
+const storedToken=(sessionStorage.getItem("empireQueueToken")||"").trim().toUpperCase();
+const storedLast4=(sessionStorage.getItem("empireQueueLast4")||"").replace(/\D/g,"").slice(-4);
+
+// Backward-compatible fallback for manual/test links.
+const queryToken=(qs.get("token")||"").trim().toUpperCase();
+const queryLast4=(qs.get("last4")||"").replace(/\D/g,"").slice(-4);
+
+const handoffToken=storedToken || queryToken;
+const handoffLast4=storedLast4 || queryLast4;
+
+if(handoffToken) document.getElementById("tokenInput").value=handoffToken;
+if(handoffLast4) document.getElementById("last4Input").value=handoffLast4;
+
+// If legacy query parameters were used, remove them from the visible URL immediately.
+if(qs.has("token") || qs.has("last4")){
+  history.replaceState({},document.title,location.pathname);
+}
 
 async function api(payload){
   const r=await fetch(ENDPOINT,{method:"POST",cache:"no-store",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
   return await r.json();
 }
+
+window.addEventListener("DOMContentLoaded",()=>{
+  if(/^E\d{3,}$/.test(handoffToken) && /^\d{4}$/.test(handoffLast4)){
+    openQueue();
+  }
+});
 async function openQueue(){
   token=document.getElementById("tokenInput").value.trim().toUpperCase();
   last4=document.getElementById("last4Input").value.replace(/\D/g,"").slice(-4);
@@ -172,6 +196,10 @@ function renderStatus(d){
   document.getElementById("refreshView").textContent="Live • connected • automatic refresh every 12 seconds";
   renderProgress(s);
   renderActions(s,d.patientResponse||"");
+  if(s==="Completed" || s==="Patient Left"){
+    sessionStorage.removeItem("empireQueueToken");
+    sessionStorage.removeItem("empireQueueLast4");
+  }
   document.title="Empire Queue • "+patientLabel(s);
 }
 function patientLabel(s){
