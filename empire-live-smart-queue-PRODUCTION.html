@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Empire Live Queue | Sri Venkateswara Empire AI Clinic</title>
+<style>
+:root{--bg:#031b16;--panel:#06271f;--panel2:#0a352a;--gold:#d8b65b;--gold2:#f1d98f;--text:#f7f1dd;--muted:#a9c7bb;--line:rgba(216,182,91,.32);--ok:#7fe0ad;--warn:#f0cb74}
+*{box-sizing:border-box}
+body{margin:0;background:
+radial-gradient(circle at 90% -10%,rgba(42,122,86,.26),transparent 34%),
+linear-gradient(145deg,#021410,#05271e 55%,#031913);color:var(--text);font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+.shell{max-width:760px;margin:auto;padding:24px 16px 110px}
+.brand{text-align:center;padding:20px 12px 16px}
+.crown{width:54px;height:54px;margin:auto;border:1px solid var(--line);border-radius:18px;display:grid;place-items:center;color:var(--gold);font-size:27px;background:rgba(0,0,0,.16)}
+.eyebrow{margin-top:12px;color:var(--gold);font-size:10px;letter-spacing:2px;text-transform:uppercase}
+h1{font-family:Georgia,serif;color:var(--gold2);font-size:30px;margin:8px 0 5px}
+.subtitle{color:var(--muted);font-size:13px;line-height:1.55}
+.card{background:linear-gradient(145deg,rgba(6,39,31,.96),rgba(5,31,25,.96));border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:0 18px 60px rgba(0,0,0,.22);margin-top:14px}
+.hidden{display:none!important}
+label{font-size:11px;color:var(--muted);display:block;margin:12px 0 7px;text-transform:uppercase;letter-spacing:.8px}
+input{width:100%;border-radius:13px;border:1px solid var(--line);background:#031b16;color:var(--text);padding:14px 15px;font-size:16px;outline:none}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button,.btn{border:1px solid var(--line);border-radius:13px;background:#0b4837;color:#fff;padding:13px 15px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center}
+button.gold,.btn.gold{background:linear-gradient(135deg,#b99032,#e3c467);color:#102119;border-color:#efd681}
+button:disabled{opacity:.55;cursor:not-allowed}
+.token{text-align:center;font-family:Georgia,serif;font-size:38px;color:var(--gold2);margin:3px 0 4px}
+.statusPill{display:inline-block;border:1px solid var(--line);padding:8px 12px;border-radius:999px;color:var(--gold2);background:rgba(216,182,91,.08);font-weight:700;font-size:13px}
+.center{text-align:center}
+.message{font-family:Georgia,serif;font-size:24px;line-height:1.28;margin:17px 0 8px;color:#fff}
+.detail{color:var(--muted);font-size:14px;line-height:1.65}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.stat{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(0,0,0,.1)}
+.stat small{display:block;color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase}
+.stat b{display:block;color:var(--gold2);font-family:Georgia,serif;font-size:20px;margin-top:5px}
+.quiet{border-left:3px solid var(--gold);padding:12px 14px;background:rgba(216,182,91,.07);border-radius:10px;color:#d8e6df;font-size:13px;line-height:1.6}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.refresh{font-size:11px;color:var(--muted);text-align:center;margin-top:12px}
+.good{color:var(--ok)} .warning{color:var(--warn)}
+.progress{display:flex;gap:5px;justify-content:center;margin:18px 0 4px}
+.progress i{height:5px;width:36px;border-radius:9px;background:#21473d}
+.progress i.on{background:var(--gold)}
+.footer{text-align:center;color:#789b8f;font-size:10px;line-height:1.55;margin:18px 10px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(2,20,16,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr 1fr;padding:9px max(9px,env(safe-area-inset-right)) calc(9px + env(safe-area-inset-bottom)) max(9px,env(safe-area-inset-left));z-index:10}
+.bottom a{color:#f6e9bd;text-decoration:none;text-align:center;font-size:11px;padding:9px 3px;border-right:1px solid rgba(216,182,91,.12)}
+.bottom a:last-child{border-right:0}
+@media(max-width:520px){h1{font-size:25px}.message{font-size:21px}.shell{padding-top:12px}.card{padding:17px}.row,.actions{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="brand">
+    <div class="crown">♛</div>
+    <div class="eyebrow">Sri Venkateswara Empire AI Clinic</div>
+    <h1>Empire Live Smart Queue™</h1>
+    <div class="subtitle">Quiet Clinic™ • Private token-based visit status<br>క్లినిక్ క్యూలో మీ ప్రస్తుత స్థితి</div>
+  </header>
+
+  <section class="card" id="verifyCard">
+    <h2 style="font-family:Georgia,serif;color:var(--gold2);margin-top:0">Open Your Queue Status</h2>
+    <p class="detail">Enter your token and the last 4 digits of the mobile number used during check-in.</p>
+    <div class="row">
+      <div>
+        <label>Token</label>
+        <input id="tokenInput" maxlength="8" placeholder="E001" autocomplete="off">
+      </div>
+      <div>
+        <label>Mobile last 4 digits</label>
+        <input id="last4Input" inputmode="numeric" maxlength="4" placeholder="1234" autocomplete="off">
+      </div>
+    </div>
+    <button class="gold" style="width:100%;margin-top:16px" onclick="openQueue()">VIEW MY LIVE STATUS</button>
+    <p class="footer">For privacy, this page does not display your name, diagnosis, specialty, reason for visit or clinical information.</p>
+  </section>
+
+  <section class="card hidden" id="liveCard">
+    <div class="center">
+      <div class="token" id="tokenView">—</div>
+      <div class="statusPill" id="statusView">Waiting</div>
+      <div class="progress" id="progress"></div>
+      <div class="message" id="messageView">Your arrival has been registered.</div>
+      <div class="detail" id="detailView"></div>
+    </div>
+
+    <div class="stats">
+      <div class="stat" id="aheadStat"><small>Patients Ahead</small><b id="aheadView">—</b></div>
+      <div class="stat" id="waitStat"><small>Approximate Wait</small><b id="waitView" style="font-size:16px">—</b></div>
+    </div>
+
+    <div class="quiet" id="quietMessage">
+      Your arrival has been registered ✓ There is no need to knock or call. Please remain in the waiting area. Your phone will let you know when the doctor is ready.
+    </div>
+
+    <div class="actions hidden" id="patientActions"></div>
+    <div class="refresh" id="refreshView">Live status refreshes automatically.</div>
+  </section>
+</div>
+
+<div class="bottom">
+  <a href="tel:+918374888794">📞 Call</a>
+  <a href="https://wa.me/918374888794">💬 WhatsApp</a>
+  <a href="index.html">🏠 Digital Card</a>
+</div>
+
+<script>
+const ENDPOINT="https://script.google.com/macros/s/AKfycbyNj-Yxv_yyARgJS9ghpdWJG2LTEg35Cx1jIZOBlR1jDQ4EJbN1LhbleNQ6kARNO0pK/exec";
+let token="",last4="",pollHandle=null,lastState="",lastSignature="",responseBusy=false;
+
+const qs=new URLSearchParams(location.search);
+if(qs.get("token")) document.getElementById("tokenInput").value=qs.get("token").toUpperCase();
+if(qs.get("last4")) document.getElementById("last4Input").value=qs.get("last4");
+
+async function api(payload){
+  const r=await fetch(ENDPOINT,{method:"POST",cache:"no-store",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+  return await r.json();
+}
+async function openQueue(){
+  token=document.getElementById("tokenInput").value.trim().toUpperCase();
+  last4=document.getElementById("last4Input").value.replace(/\D/g,"").slice(-4);
+  if(!/^E\d{3,}$/.test(token)||last4.length!==4){
+    alert("Please enter your token and exactly 4 mobile digits.");
+    return;
+  }
+  await refreshStatus(true);
+}
+async function refreshStatus(first=false){
+  try{
+    const d=await api({action:"patientStatus",token,last4});
+    if(d.status!=="success") throw new Error(d.message||"Unable to verify");
+    document.getElementById("verifyCard").classList.add("hidden");
+    document.getElementById("liveCard").classList.remove("hidden");
+    const sig=statusSignature(d);
+    if(first || sig!==lastSignature){
+      renderStatus(d);
+      lastSignature=sig;
+    } else {
+      document.getElementById("refreshView").textContent="Live • connected • automatic refresh every 12 seconds";
+    }
+    if(first&&!pollHandle) pollHandle=setInterval(()=>refreshStatus(false),12000);
+  }catch(e){
+    if(first) alert("We could not verify this token. Check the token and the mobile last 4 digits.");
+    document.getElementById("refreshView").textContent="Live refresh temporarily unavailable. Retrying…";
+  }
+}
+
+function statusSignature(d){
+  return JSON.stringify({
+    token:d.token||token,
+    queueStatus:d.queueStatus||"Waiting",
+    patientsAhead:Number.isFinite(Number(d.patientsAhead))?Number(d.patientsAhead):null,
+    approximateWait:d.approximateWait||"",
+    patientResponse:d.patientResponse||""
+  });
+}
+function renderStatus(d){
+  const s=d.queueStatus||"Waiting";
+  lastState=s;
+  document.getElementById("tokenView").textContent=d.token||token;
+  document.getElementById("statusView").textContent=patientLabel(s);
+  const aheadStat=document.getElementById("aheadStat");
+  const waitStat=document.getElementById("waitStat");
+  const stats=document.querySelector(".stats");
+  const showAhead=(s==="Waiting" || s==="You're Next");
+  aheadStat.classList.toggle("hidden",!showAhead);
+  stats.style.gridTemplateColumns=showAhead?"1fr 1fr":"1fr";
+  document.getElementById("aheadView").textContent=showAhead && Number.isFinite(Number(d.patientsAhead))?d.patientsAhead:"—";
+  document.getElementById("waitView").textContent=d.approximateWait||"—";
+  waitStat.querySelector("small").textContent=showAhead?"Approximate Wait":"Current Status";
+  document.getElementById("messageView").textContent=mainMessage(s);
+  document.getElementById("detailView").textContent=detailMessage(s);
+  document.getElementById("quietMessage").textContent=quietMessage(s);
+  document.getElementById("refreshView").textContent="Live • connected • automatic refresh every 12 seconds";
+  renderProgress(s);
+  renderActions(s,d.patientResponse||"");
+  document.title="Empire Queue • "+patientLabel(s);
+}
+function patientLabel(s){
+  return {
+    "Waiting":"Waiting",
+    "You're Next":"You're Next",
+    "Doctor Ready":"Doctor Ready",
+    "In Consultation":"Consultation in Progress",
+    "Completed":"Visit Completed",
+    "Patient Unavailable":"Please Confirm",
+    "Patient Left":"Queue Session Closed"
+  }[s]||"Queue Update";
+}
+function mainMessage(s){
+  return {
+    "Waiting":"Your arrival has been registered.",
+    "You're Next":"Please remain ready. You are next.",
+    "Doctor Ready":"The doctor is ready for you now.",
+    "In Consultation":"Consultation in progress.",
+    "Completed":"Your queue visit is complete.",
+    "Patient Unavailable":"We tried to call your token.",
+    "Patient Left":"This queue session has been closed."
+  }[s]||"Your queue status has been updated.";
+}
+function detailMessage(s){
+  return {
+    "Waiting":"Please remain in the waiting area. Queue order may change for appointments or physician-directed clinical priority.",
+    "You're Next":"Please stay close to the consultation area and keep this page available.",
+    "Doctor Ready":"Please proceed to the consultation room. If you need a few minutes, use the option below.",
+    "In Consultation":"This neutral status protects your privacy and does not display the reason for your visit.",
+    "Completed":"You may close this page. Follow the doctor's aftercare or follow-up instructions, if any.",
+    "Patient Unavailable":"If you are still at the clinic, confirm below so the physician can see your response.",
+    "Patient Left":"If this was unexpected, please contact the clinic."
+  }[s]||"";
+}
+function quietMessage(s){
+  if(s==="Waiting") return "Your arrival has been registered ✓ There is no need to knock or call. Please remain in the waiting area. Your phone will let you know when the doctor is ready.";
+  if(s==="You're Next") return "You’re next ✓ Please remain nearby. There is no need to knock. The doctor will update your token when ready.";
+  if(s==="Doctor Ready") return "Doctor ready ✓ Please proceed now. If you need a few minutes, use the private response below.";
+  if(s==="In Consultation") return "Consultation in Progress • No clinical or specialty details are displayed on this page.";
+  if(s==="Completed") return "Visit queue completed ✓ Thank you.";
+  return "Your queue status is private and token-based.";
+}
+function renderProgress(s){
+  const order=["Waiting","You're Next","Doctor Ready","In Consultation","Completed"];
+  let idx=order.indexOf(s); if(idx<0) idx=0;
+  document.getElementById("progress").innerHTML=order.map((_,i)=>`<i class="${i<=idx?'on':''}"></i>`).join("");
+}
+function renderActions(s,response){
+  const box=document.getElementById("patientActions");
+  let actions=[];
+  if(s==="You're Next") actions=[["Ready","I'M READY"],["Need a Few Minutes","NEED A FEW MINUTES"]];
+  if(s==="Doctor Ready") actions=[["I'm Coming","I'M COMING"],["Need a Few Minutes","NEED A FEW MINUTES"]];
+  if(s==="Patient Unavailable") actions=[["I'm Here","I'M STILL HERE"],["I'm Coming","I'M COMING"]];
+  if(!actions.length){box.classList.add("hidden");box.innerHTML="";return}
+  box.classList.remove("hidden");
+  box.innerHTML=actions.map(([v,l],i)=>`<button class="${i===0?'gold':''}" data-response="${escapeHtml(v)}">${l}</button>`).join("")
+    +(response?`<div style="grid-column:1/-1;text-align:center;color:#a9c7bb;font-size:11px">Your latest response: <b style="color:#f1d98f">${escapeHtml(response)}</b></div>`:"");
+  box.querySelectorAll("button[data-response]").forEach(btn=>{
+    btn.addEventListener("click",()=>sendResponse(btn.dataset.response));
+  });
+}
+async function sendResponse(response){
+  if(responseBusy) return;
+  responseBusy=true;
+  const box=document.getElementById("patientActions");
+  const buttons=[...box.querySelectorAll("button")];
+  buttons.forEach(b=>b.disabled=true);
+  let note=document.getElementById("responseNote");
+  if(!note){
+    note=document.createElement("div");
+    note.id="responseNote";
+    note.style.cssText="grid-column:1/-1;text-align:center;color:#f1d98f;font-size:12px;margin-top:4px";
+    box.appendChild(note);
+  }
+  note.textContent="Sending your response…";
+  try{
+    const d=await api({action:"patientResponse",token:token,last4:last4,response:response});
+    if(d.status!=="success") throw new Error(d.message||"Response not accepted");
+    note.textContent="✓ Response received: "+response;
+    lastSignature="";
+    await refreshStatus(false);
+  }catch(e){
+    note.textContent="Response not recorded. Please try once more.";
+    alert("Your response could not be recorded: "+(e.message||"Unknown error"));
+  }finally{
+    responseBusy=false;
+    buttons.forEach(b=>b.disabled=false);
+  }
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+</script>
+</body>
+</html>
