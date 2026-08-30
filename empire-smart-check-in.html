@@ -175,8 +175,9 @@ function resetForm(){
   document.getElementById("checkinForm").reset();
   document.getElementById("success").classList.add("hidden");
   document.getElementById("step1").classList.remove("hidden");
-  sessionStorage.removeItem("empireQueueToken");
-  sessionStorage.removeItem("empireQueueLast4");
+  localStorage.removeItem("empireQueueToken");
+  localStorage.removeItem("empireQueueLast4");
+  localStorage.removeItem("empireQueueSavedAt");
 }
 
 document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
@@ -212,8 +213,9 @@ document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
 
     const token = String(data.token).toUpperCase();
 
-    sessionStorage.setItem("empireQueueToken", token);
-    sessionStorage.setItem("empireQueueLast4", last4);
+    localStorage.setItem("empireQueueToken", token);
+    localStorage.setItem("empireQueueLast4", last4);
+    localStorage.setItem("empireQueueSavedAt", String(Date.now()));
 
     document.getElementById("checkinForm").classList.add("hidden");
     document.getElementById("token").textContent = token;
