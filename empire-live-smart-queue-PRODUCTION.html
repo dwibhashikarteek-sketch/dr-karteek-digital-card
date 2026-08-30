@@ -108,10 +108,17 @@ let token="",last4="",pollHandle=null,lastState="",lastSignature="",responseBusy
 
 const qs=new URLSearchParams(location.search);
 
-// Preferred Smart Check-In handoff: same-tab sessionStorage.
-// This avoids placing mobile digits in the browser URL.
-const storedToken=(sessionStorage.getItem("empireQueueToken")||"").trim().toUpperCase();
-const storedLast4=(sessionStorage.getItem("empireQueueLast4")||"").replace(/\D/g,"").slice(-4);
+// Preferred Smart Check-In handoff: temporary localStorage.
+// This survives an accidentally closed tab without placing mobile digits in the URL.
+const savedAt=Number(localStorage.getItem("empireQueueSavedAt")||0);
+const handoffFresh=savedAt>0 && (Date.now()-savedAt)<12*60*60*1000;
+if(!handoffFresh){
+  localStorage.removeItem("empireQueueToken");
+  localStorage.removeItem("empireQueueLast4");
+  localStorage.removeItem("empireQueueSavedAt");
+}
+const storedToken=handoffFresh?(localStorage.getItem("empireQueueToken")||"").trim().toUpperCase():"";
+const storedLast4=handoffFresh?(localStorage.getItem("empireQueueLast4")||"").replace(/\D/g,"").slice(-4):"";
 
 // Backward-compatible fallback for manual/test links.
 const queryToken=(qs.get("token")||"").trim().toUpperCase();
@@ -197,8 +204,9 @@ function renderStatus(d){
   renderProgress(s);
   renderActions(s,d.patientResponse||"");
   if(s==="Completed" || s==="Patient Left"){
-    sessionStorage.removeItem("empireQueueToken");
-    sessionStorage.removeItem("empireQueueLast4");
+    localStorage.removeItem("empireQueueToken");
+    localStorage.removeItem("empireQueueLast4");
+    localStorage.removeItem("empireQueueSavedAt");
   }
   document.title="Empire Queue • "+patientLabel(s);
 }
