@@ -34,6 +34,7 @@ button,.btn{
   appearance:none;border:1px solid var(--line);border-radius:14px;padding:14px 16px;
   background:#102c24;color:var(--text);font:inherit;font-weight:700;cursor:pointer;text-align:center
 }
+a.btn{display:block;text-decoration:none}
 button.primary,.btn.primary{background:linear-gradient(180deg,#e3c77f,#b78d38);color:#102016;border-color:#e8cf8e}
 button:hover,.btn:hover{filter:brightness(1.06)}
 label{display:block;margin:14px 0 7px;color:#efe5c8;font-size:14px}
@@ -51,6 +52,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
   border:1px solid var(--line);background:#081a15;color:var(--gold2);font-size:34px;font-weight:700;letter-spacing:.04em
 }
 .status{color:var(--ok);font-weight:700}
+.quiet{
+  margin:16px 0;padding:13px 14px;border-left:3px solid var(--gold);
+  background:rgba(216,182,106,.08);border-radius:10px;text-align:left;color:#e8eee9;
+  font-size:14px;line-height:1.55
+}
+.queueBtn{margin-top:16px}
 .footer{text-align:center;margin-top:14px;color:#94a59d;font-size:12px;line-height:1.5}
 .bottom{
   position:fixed;left:0;right:0;bottom:0;background:rgba(3,14,11,.96);backdrop-filter:blur(12px);
@@ -69,7 +76,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     <h1>Empire Smart Check-In™</h1>
     <div class="sub">Fast • Private • Reception-Free Arrival</div>
   </div>
-
   <div class="card">
     <div id="step1">
       <div class="progress"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
@@ -80,7 +86,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
         <button onclick="chooseType('walkin')">No — I Am a Walk-In</button>
       </div>
     </div>
-
     <form id="checkinForm" class="hidden">
       <div class="progress"><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
       <h2 id="formTitle">Check In</h2>
@@ -123,10 +128,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     <div id="success" class="hidden success">
       <div class="progress"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
       <h2>Check-In Successful</h2>
-      <p class="status">You are now checked in.</p>
+      <p class="status">Your arrival has been registered ✓</p>
       <div class="token" id="token">—</div>
-      <p id="successText">Please take a seat. You will be called when the doctor is ready.</p>
-      <p class="note">Keep this page open if you want to remember your token number.</p>
+      <div class="quiet">
+        There is no need to knock or call. Please remain in the waiting area.
+        Your phone will let you know when the doctor is ready.
+      </div>
+      <a id="queueLink" class="btn primary queueBtn" href="empire-live-smart-queue-PRODUCTION.html">VIEW MY LIVE QUEUE →</a>
+      <p class="note">Your queue status is private and token-based. Keep this page or the Live Queue page available while you wait.</p>
       <button onclick="resetForm()">New Check-In</button>
     </div>
   </div>
@@ -144,6 +153,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 
 <script>
 const ENDPOINT = "https://script.google.com/macros/s/AKfycbyNj-Yxv_yyARgJS9ghpdWJG2LTEg35Cx1jIZOBlR1jDQ4EJbN1LhbleNQ6kARNO0pK/exec";
+const QUEUE_PAGE = "empire-live-smart-queue-PRODUCTION.html";
 let selectedType = "";
 
 function chooseType(type){
@@ -155,29 +165,37 @@ function chooseType(type){
   document.getElementById("appointmentFields").classList.toggle("hidden", !isAppt);
   document.getElementById("formTitle").textContent = isAppt ? "Appointment Check-In" : "Walk-In Check-In";
 }
+
 function goBack(){
   document.getElementById("checkinForm").classList.add("hidden");
   document.getElementById("step1").classList.remove("hidden");
 }
+
 function resetForm(){
   document.getElementById("checkinForm").reset();
   document.getElementById("success").classList.add("hidden");
   document.getElementById("step1").classList.remove("hidden");
+  sessionStorage.removeItem("empireQueueToken");
+  sessionStorage.removeItem("empireQueueLast4");
 }
+
 document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
   e.preventDefault();
   if(!ENDPOINT){
     alert("Smart Check-In backend is not connected yet.");
     return;
   }
+
   const btn = e.submitter;
   btn.disabled = true;
   btn.textContent = "Checking In…";
 
+  const last4 = document.getElementById("last4").value.trim();
   const payload = {
+    action: "checkIn",
     visitType: document.getElementById("visitType").value,
     name: document.getElementById("name").value.trim(),
-    last4: document.getElementById("last4").value.trim(),
+    last4,
     appointmentTime: document.getElementById("appointmentTime").value,
     visitReason: document.getElementById("visitReason").value
   };
@@ -185,15 +203,24 @@ document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
   try{
     const res = await fetch(ENDPOINT,{
       method:"POST",
+      cache:"no-store",
       headers:{"Content-Type":"text/plain;charset=utf-8"},
       body:JSON.stringify(payload)
     });
     const data = await res.json();
-    if(data.status !== "success") throw new Error(data.message || "Check-in failed");
+    if(data.status !== "success" || !data.token) throw new Error(data.message || "Check-in failed");
+
+    const token = String(data.token).toUpperCase();
+
+    sessionStorage.setItem("empireQueueToken", token);
+    sessionStorage.setItem("empireQueueLast4", last4);
+
     document.getElementById("checkinForm").classList.add("hidden");
-    document.getElementById("token").textContent = data.token || "CHECKED IN";
+    document.getElementById("token").textContent = token;
+    document.getElementById("queueLink").href = QUEUE_PAGE;
     document.getElementById("success").classList.remove("hidden");
   }catch(err){
+    console.error(err);
     alert("Check-in could not be completed. Please try again or contact the clinic.");
   }finally{
     btn.disabled = false;
