@@ -218,6 +218,7 @@ function patientLabel(s){
     "In Consultation":"Consultation in Progress",
     "Completed":"Visit Completed",
     "Patient Unavailable":"Please Confirm",
+    "Temporary Step-Out":"Stepped Out",
     "Patient Left":"Queue Session Closed"
   }[s]||"Queue Update";
 }
@@ -229,6 +230,7 @@ function mainMessage(s){
     "In Consultation":"Consultation in progress.",
     "Completed":"Your queue visit is complete.",
     "Patient Unavailable":"We tried to call your token.",
+    "Temporary Step-Out":"Your token is temporarily on hold.",
     "Patient Left":"This queue session has been closed."
   }[s]||"Your queue status has been updated.";
 }
@@ -240,6 +242,7 @@ function detailMessage(s){
     "In Consultation":"This neutral status protects your privacy and does not display the reason for your visit.",
     "Completed":"You may close this page. Follow the doctor's aftercare or follow-up instructions, if any.",
     "Patient Unavailable":"If you are still at the clinic, confirm below so the physician can see your response.",
+    "Temporary Step-Out":"You may temporarily step away. Your token remains active, but your previous queue position is not guaranteed. Tap I’M BACK when you return.",
     "Patient Left":"If this was unexpected, please contact the clinic."
   }[s]||"";
 }
@@ -249,11 +252,13 @@ function quietMessage(s){
   if(s==="Doctor Ready") return "Doctor ready ✓ Please proceed now. If you need a few minutes, use the private response below.";
   if(s==="In Consultation") return "Consultation in Progress • No clinical or specialty details are displayed on this page.";
   if(s==="Completed") return "Visit queue completed ✓ Thank you.";
+  if(s==="Temporary Step-Out") return "Temporary Step-Out ✓ Your token remains active. Queue position is not guaranteed until the physician restores you.";
   return "Your queue status is private and token-based.";
 }
 function renderProgress(s){
   const order=["Waiting","You're Next","Doctor Ready","In Consultation","Completed"];
   let idx=order.indexOf(s); if(idx<0) idx=0;
+  if(s==="Temporary Step-Out") idx=0;
   document.getElementById("progress").innerHTML=order.map((_,i)=>`<i class="${i<=idx?'on':''}"></i>`).join("");
 }
 function renderActions(s,response){
@@ -262,6 +267,7 @@ function renderActions(s,response){
   if(s==="You're Next") actions=[["Ready","I'M READY"],["Need a Few Minutes","NEED A FEW MINUTES"]];
   if(s==="Doctor Ready") actions=[["I'm Coming","I'M COMING"],["Need a Few Minutes","NEED A FEW MINUTES"]];
   if(s==="Patient Unavailable") actions=[["I'm Here","I'M STILL HERE"],["I'm Coming","I'M COMING"]];
+  if(s==="Temporary Step-Out") actions=[["I'm Here","I'M BACK"]];
   if(!actions.length){box.classList.add("hidden");box.innerHTML="";return}
   box.classList.remove("hidden");
   box.innerHTML=actions.map(([v,l],i)=>`<button class="${i===0?'gold':''}" data-response="${escapeHtml(v)}">${l}</button>`).join("")
