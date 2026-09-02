@@ -245,9 +245,8 @@ document.getElementById("scanForm").addEventListener("submit",async e=>{
  }catch(err){
    btn.disabled=false;
    status.className="submitStatus error";
-   status.textContent="DIAGNOSTIC: " + (err && err.message ? err.message : String(err));
+   status.textContent="Submission could not be completed. Please try again. If the problem continues, please inform the clinic.";
    console.error("IntimaScan registry submission failed",err);
-   try{ alert("IntimaScan diagnostic response:\n\n" + (err && err.message ? err.message : String(err))); }catch(_){}
  }
 });
 </script>
