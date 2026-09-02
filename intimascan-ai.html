@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>IntimaScan™ AI V1.2.1 — Confidential Men's Sexual Wellness Assessment</title>
+<style>
+:root{--bg:#061512;--card:#0b211c;--card2:#0e2a23;--gold:#d8b45b;--text:#f7f1df;--muted:#b9c8c2;--line:#29483f;--red:#ff8a80;--green:#8bd6ae}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#04110e,#082019 55%,#04110e);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.wrap{max-width:760px;margin:auto;padding:18px 14px 70px}.brand{text-align:center;padding:18px 8px 8px}.brand .kicker{color:var(--gold);letter-spacing:.16em;font-size:12px;text-transform:uppercase}
+h1{font-family:Georgia,serif;color:var(--gold);font-size:30px;margin:8px 0 2px}h2{font-size:20px;color:var(--gold);margin:0 0 12px}h3{font-size:16px;margin:16px 0 8px}
+.sub,.note{color:var(--muted)}.card{background:rgba(11,33,28,.96);border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 12px 32px #0005}
+.q{padding:14px 0;border-top:1px solid var(--line)}.q:first-of-type{border-top:0}label.title{display:block;font-weight:700;margin-bottom:8px}
+select,input[type=text],input[type=number],textarea{width:100%;background:#061713;color:var(--text);border:1px solid #36574d;border-radius:12px;padding:12px;font:inherit}
+textarea{min-height:86px}.checks label,.radios label{display:block;padding:7px 0}.checks input,.radios input{margin-right:8px;transform:scale(1.15)}
+.rangeRow{display:grid;grid-template-columns:1fr 64px;gap:10px;align-items:center}.rangeRow input[type=range]{width:100%;accent-color:var(--gold)}
+.score{font-size:28px;color:var(--gold);font-weight:800}.alert{border-color:#7b3e38;background:#2b1715}.alert strong{color:var(--red)}
+button{width:100%;border:0;border-radius:14px;padding:15px;font-weight:800;font-size:16px;cursor:pointer;background:linear-gradient(135deg,#d8b45b,#f1d78d);color:#172019}
+button.secondary{background:#16352c;color:var(--text);border:1px solid var(--line)}.hidden{display:none}.footer{text-align:center;color:#91a79f;font-size:12px;margin-top:22px}
+.badge{display:inline-block;border:1px solid #49675d;border-radius:999px;padding:4px 9px;color:#d7e4df;font-size:12px}.success{text-align:center;padding:26px 10px}.success .tick{font-size:42px;color:var(--green)}
+small{color:var(--muted)} .idgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.submitStatus{margin-top:10px;color:var(--muted);font-size:13px}.submitStatus.error{color:var(--red)}.submitStatus.ok{color:var(--green)}@media(max-width:600px){.idgrid{grid-template-columns:1fr}} .submitStatus{margin-top:10px;color:var(--muted);font-size:13px}.submitStatus.error{color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="brand">
+<div class="kicker">Sri Venkateswara Empire AI Clinic</div>
+<h1>IntimaScan™ AI</h1>
+<div class="sub">Confidential Men’s Sexual Wellness Assessment</div>
+</header>
+
+<form id="scanForm">
+<section class="card">
+<h2>Assessment Identification</h2>
+<p class="note">Used only to match this confidential assessment with your physician review.</p>
+<div class="idgrid">
+<div class="q"><label class="title">Patient name / identifier</label><input type="text" name="patient" id="patientName" maxlength="120" placeholder="Enter name or clinic identifier"></div>
+<div class="q"><label class="title">Mobile last 4 digits</label><input type="text" name="mobileLast4" id="mobileLast4" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="0000"></div>
+</div>
+<input type="hidden" name="token" id="patientToken">
+<small>If opened from Empire Smart Queue, available token details can be filled automatically.</small>
+</section>
+<section class="card">
+<h2>Before You Begin</h2>
+<p class="note">Please answer based on your experience during the <b>recent weeks</b>. Your answers are confidential and are intended to help your physician understand your sexual wellness more clearly.</p>
+<span class="badge">Physician-supervised • Confidential</span>
+</section>
+
+<section class="card">
+<h2>Section A — Sexual Wellness</h2>
+<p class="note">For Questions 1–10, select the option that best describes you.</p>
+<div id="scoreQuestions"></div>
+<div class="q"><b>Sexual Wellness Score</b><div class="score"><span id="score">0</span> /100</div><small>The interpretation is not shown on the patient screen and is intended for physician review.</small></div>
+</section>
+
+<section class="card"><h2>Section B — Main Concern</h2>
+<div class="q checks"><label class="title">What would you most like help with? Select all that apply.</label><div id="concerns"></div></div>
+</section>
+
+<section class="card"><h2>Section C — Duration</h2>
+<div class="q"><label class="title">How long have you noticed the main concern?</label><select name="duration"><option>No current concern</option><option>Less than 1 month</option><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option><option>More than 1 year</option></select></div>
+<div class="q"><label class="title">Was the onset?</label><select name="onset"><option>Sudden</option><option>Gradual</option><option>Unsure</option></select></div>
+</section>
+
+<section class="card"><h2>Section D — Erection Pattern</h2>
+<div class="q"><label class="title">When are erection difficulties most noticeable?</label><select name="erection_pattern"><option>No erection difficulty</option><option>During partnered sexual activity</option><option>During masturbation</option><option>Both</option><option>Variable</option></select></div>
+<div class="q"><label class="title">Morning erections compared with previously:</label><select name="morning_change"><option>Similar</option><option>Reduced</option><option>Absent</option><option>Unsure</option></select></div>
+</section>
+
+<section class="card"><h2>Section E — Ejaculatory Wellness</h2>
+<div class="q"><label class="title">Do you currently have a concern regarding ejaculation?</label><select name="ejaculation" id="ejaculation"><option>No</option><option>Ejaculation occurs earlier than desired</option><option>Ejaculation is significantly delayed</option><option>Difficulty ejaculating</option><option>Variable</option></select></div>
+<div class="q hidden" id="earlyBox"><label class="title">Does it cause distress or dissatisfaction?</label><select name="early_distress"><option>No</option><option>Sometimes</option><option>Yes</option></select></div>
+</section>
+
+<section class="card"><h2>Section F — Psychological & Relationship Context</h2>
+<div id="psychRanges"></div>
+<div class="q"><label class="title">Relationship status / response preference</label><select name="relationship_option"><option value="">Use score above</option><option>Not currently partnered</option><option>Prefer not to answer</option></select></div>
+<div class="q"><label class="title">Do you feel your sexual concern is affected by stress, anxiety or relationship factors?</label><select name="psych_contribution"><option>No</option><option>Possibly</option><option>Yes</option><option>Unsure</option></select></div>
+</section>
+
+<section class="card"><h2>Section G — General Health</h2><div class="q checks"><label class="title">Have you been diagnosed with any of the following?</label><div id="health"></div></div></section>
+
+<section class="card"><h2>Section H — Lifestyle</h2>
+<div class="q"><label class="title">Tobacco/nicotine</label><select name="tobacco"><option>Never</option><option>Former</option><option>Current</option></select></div>
+<div class="q"><label class="title">Alcohol</label><select name="alcohol"><option>Never</option><option>Occasionally</option><option>Regularly</option></select></div>
+<div class="q"><label class="title">Physical activity</label><select name="activity"><option>Low</option><option>Moderate</option><option>Regular</option></select></div>
+<div class="q"><label class="title">Average sleep</label><select name="sleep"><option>&lt;5 hours</option><option>5–6 hours</option><option>6–7 hours</option><option>7–8 hours</option><option>&gt;8 hours</option></select></div>
+<div class="q"><label class="title">Current stress</label><select name="stress_cat"><option>Low</option><option>Moderate</option><option>High</option><option>Very high</option></select></div>
+</section>
+
+<section class="card"><h2>Section I — Medication & Hormonal Context</h2>
+<div class="q"><label class="title">Are you taking regular medication?</label><select name="regular_meds" id="regularMeds"><option>No</option><option>Yes</option></select></div>
+<div class="q hidden" id="medBox"><label class="title">Please enter medicines if known:</label><textarea name="medicines"></textarea></div>
+<div class="q"><label class="title">Have you used testosterone, anabolic steroids or sexual-performance medication?</label><select name="hormonal_context"><option>Never</option><option>Previously</option><option>Currently</option><option>Prefer not to answer</option></select></div>
+</section>
+
+<section class="card"><h2>Section J — Fertility</h2>
+<div class="q"><label class="title">Are you currently trying to conceive?</label><select name="trying" id="trying"><option>No</option><option>Yes</option></select></div>
+<div class="q hidden" id="fertilityBox"><label class="title">How long?</label><select name="trying_duration"><option>&lt;6 months</option><option>6–12 months</option><option>&gt;12 months</option></select><p class="note">Your physician may recommend → AI Fertility Scan™</p></div>
+</section>
+
+<section class="card alert"><h2>Section K — Important Safety Questions</h2>
+<div class="q checks"><label class="title">Do you currently have any of the following?</label><div id="safety"></div></div>
+<p class="note"><strong>Important:</strong> Relevant positive answers require physician review. Acute severe testicular pain or another potentially urgent presentation requires urgent medical assessment rather than completion of a routine AI report.</p>
+</section>
+
+<section class="card"><h2>Section L — Patient Goal</h2>
+<div class="q checks"><label class="title">What are your three most important goals? Choose up to three.</label><div id="goals"></div><small id="goalMsg"></small></div>
+</section>
+
+<section class="card">
+<p class="note"><b>Clinical notice:</b> An AI score alone does not diagnose a sexual disorder. Submitted information is intended to support physician review.</p>
+<button id="submitBtn" type="submit">Complete IntimaScan™</button><div id="submitStatus" class="submitStatus"></div>
+</section>
+</form>
+
+<section id="complete" class="card success hidden">
+<div class="tick">✓</div><h2>IntimaScan™ Completed</h2>
+<p>Your confidential Men's Sexual Wellness Assessment has been completed.</p>
+<p class="note">Your responses will be reviewed together with relevant health, lifestyle and psychological factors to help guide your physician consultation.</p>
+<p><b>An AI score alone does not diagnose a sexual disorder.</b></p>
+<button class="secondary" onclick="location.reload()">Return</button>
+</section>
+<div class="footer">IntimaScan™ AI • Physician-supervised sexual wellness assessment</div>
+</div>
+<script>
+const scored=[
+["Sexual desire / libido",["Very poor","Poor","Below average","Moderate","Good","Excellent"]],
+["Morning erections",["Never","Rarely","Occasionally","Sometimes","Frequently","Regularly"]],
+["Erection hardness",["Very poor","Poor","Below satisfactory","Moderate","Good","Excellent"]],
+["Ability to maintain erection",["Unable","Very difficult","Frequently difficult","Moderately satisfactory","Usually good","Consistently good"]],
+["Sexual confidence",["Very low","Low","Below average","Moderate","Good","Very good"]],
+["Sexual stamina",["Very poor","Poor","Below average","Moderate","Good","Excellent"]],
+["Satisfaction with sexual intimacy",["Very dissatisfied","Dissatisfied","Somewhat dissatisfied","Moderately satisfied","Satisfied","Very satisfied"]],
+["Ejaculatory control",["Very poor","Poor","Limited","Moderate","Good","Very good"]],
+["Satisfaction with frequency of sexual activity",["Very dissatisfied","Dissatisfied","Somewhat dissatisfied","Moderately satisfied","Satisfied","Very satisfied"]],
+["Overall sexual performance and wellbeing",["Very poor","Poor","Below satisfactory","Moderate","Good","Excellent"]]
+];
+const sq=document.getElementById("scoreQuestions");
+scored.forEach((q,i)=>{let d=document.createElement("div");d.className="q";d.innerHTML=`<label class="title">${i+1}. ${q[0]}</label><select class="scoreQ" name="score_${i+1}" required><option value="" selected disabled>Select...</option>${q[1].map((x,j)=>`<option value="${j*2}">${x} — ${j*2}</option>`).join("")}</select>`;sq.appendChild(d)});
+function updateScore(){document.getElementById("score").textContent=[...document.querySelectorAll(".scoreQ")].reduce((a,x)=>a+(+x.value||0),0)}
+document.querySelectorAll(".scoreQ").forEach(x=>x.addEventListener("change",updateScore));
+
+function checks(id,name,items){document.getElementById(id).innerHTML=items.map(x=>`<label><input type="checkbox" name="${name}" value="${x}">${x}</label>`).join("")}
+checks("concerns","concern",["Reduced sexual desire","Difficulty achieving erection","Difficulty maintaining erection","Reduced erection hardness","Early ejaculation","Delayed ejaculation","Difficulty reaching orgasm","Reduced sexual confidence","Performance anxiety","Reduced stamina","Relationship/intimacy concern","Fertility concern","Penile discomfort/curvature","Other","No particular concern — preventive wellness assessment"]);
+checks("health","health",["Diabetes","Prediabetes","High blood pressure","High cholesterol","Thyroid disorder","Heart/cardiovascular disease","Obesity/weight concern","Neurological condition","Hormonal disorder","Prostate condition","Pelvic/spinal surgery or injury","None known","Other"]);
+checks("safety","safety",["Significant penile pain","New penile injury","New significant curvature/deformity","Testicular pain or swelling","Blood in urine/semen","Genital ulcer/lesion","Unexplained genital discharge","Severe pelvic pain","None of these"]);
+checks("goals","goal",["Improve erection quality","Improve erection maintenance","Improve sexual desire","Improve ejaculatory control","Improve stamina","Improve confidence","Reduce performance anxiety","Improve relationship/intimacy","Improve fertility preparedness","Understand my sexual health","Preventive sexual wellness","Other"]);
+
+const psych=[["Current stress","stress10"],["Anxiety related to sexual performance","anxiety10"],["Sexual confidence","confidence10"],["Relationship/intimacy satisfaction","relationship10"]];
+document.getElementById("psychRanges").innerHTML=psych.map(([t,n])=>`<div class="q"><label class="title">${t}</label><div class="rangeRow"><input type="range" min="0" max="10" value="5" name="${n}" oninput="this.nextElementSibling.value=this.value"><output>5</output></div></div>`).join("");
+
+document.getElementById("ejaculation").onchange=e=>document.getElementById("earlyBox").classList.toggle("hidden",e.target.value!=="Ejaculation occurs earlier than desired");
+document.getElementById("regularMeds").onchange=e=>document.getElementById("medBox").classList.toggle("hidden",e.target.value!=="Yes");
+document.getElementById("trying").onchange=e=>document.getElementById("fertilityBox").classList.toggle("hidden",e.target.value!=="Yes");
+
+document.querySelectorAll('input[name="goal"]').forEach(c=>c.addEventListener("change",()=>{
+ let a=[...document.querySelectorAll('input[name="goal"]:checked')];
+ if(a.length>3){c.checked=false;document.getElementById("goalMsg").textContent="Please choose up to three goals."}
+ else document.getElementById("goalMsg").textContent=`${a.length}/3 selected`;
+}));
+
+
+function enforceExclusive(groupName, exclusiveValue){
+ const boxes=[...document.querySelectorAll(`input[name="${groupName}"]`)];
+ boxes.forEach(box=>box.addEventListener("change",()=>{
+   if(!box.checked) return;
+   if(box.value===exclusiveValue){
+     boxes.forEach(other=>{if(other!==box) other.checked=false});
+   } else {
+     const ex=boxes.find(x=>x.value===exclusiveValue);
+     if(ex) ex.checked=false;
+   }
+ }));
+}
+enforceExclusive("concern","No particular concern — preventive wellness assessment");
+enforceExclusive("health","None known");
+enforceExclusive("safety","None of these");
+
+// V1.2 Registry Bridge — public patient submission only. No physician PIN is stored in this file.
+const INTIMASCAN_REGISTRY_ENDPOINT = "https://script.google.com/macros/s/AKfycbwAFC547exE6OIR9Ms77c5SLwr0JdFjXnpBTAgbOqJicQ6SuWhIpbxT9NGqgBRNF3sJNA/exec";
+
+async function sendToIntimaScanInbox(data){
+ const payload={action:"submitIntimaScan",payload:data};
+ const res=await fetch(INTIMASCAN_REGISTRY_ENDPOINT,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+ const text=await res.text();
+ let out; try{out=JSON.parse(text)}catch(_){throw new Error("Invalid registry response")};
+ if(!out || out.status!=="success") throw new Error((out&&out.message)||"Submission was not accepted");
+ return out;
+}
+
+
+// Prefill privacy-safe identifiers when IntimaScan is launched from the Empire ecosystem.
+(function prefillIdentity(){
+  const p=new URLSearchParams(location.search);
+  const token=p.get("token")||"";
+  const patient=p.get("patient")||"";
+  const last4=(p.get("last4")||p.get("mobileLast4")||"").replace(/\D/g,"").slice(-4);
+  if(token) document.getElementById("patientToken").value=token;
+  if(patient) document.getElementById("patientName").value=patient;
+  if(last4) document.getElementById("mobileLast4").value=last4;
+  try{
+    const handoff=JSON.parse(localStorage.getItem("empire_checkin_handoff")||"{}");
+    if(!document.getElementById("patientToken").value && handoff.token) document.getElementById("patientToken").value=handoff.token;
+    if(!document.getElementById("patientName").value && handoff.name) document.getElementById("patientName").value=handoff.name;
+    if(!document.getElementById("mobileLast4").value && handoff.last4) document.getElementById("mobileLast4").value=String(handoff.last4).replace(/\D/g,"").slice(-4);
+  }catch(_){}
+})();
+
+document.getElementById("scanForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const patientId=(document.getElementById("patientName").value||"").trim();
+ const last4=(document.getElementById("mobileLast4").value||"").replace(/\D/g,"");
+ const token=(document.getElementById("patientToken").value||"").trim();
+ if(!patientId && !last4 && !token){alert("Please enter your patient name/identifier or mobile last 4 digits so the physician can match this assessment.");document.getElementById("patientName").scrollIntoView({behavior:"smooth",block:"center"});return;}
+ if(last4 && last4.length!==4){alert("Please enter exactly the last 4 digits of the mobile number.");document.getElementById("mobileLast4").focus();return;}
+ const safetyChosen=[...document.querySelectorAll('input[name="safety"]:checked')];
+ if(safetyChosen.length===0){alert("Please answer the Important Safety Questions before completing IntimaScan™.");document.querySelector('input[name="safety"]').scrollIntoView({behavior:"smooth",block:"center"});return;}
+ const goalsChosen=[...document.querySelectorAll('input[name="goal"]:checked')];
+ if(goalsChosen.length===0){alert("Please select at least one patient goal.");document.querySelector('input[name="goal"]').scrollIntoView({behavior:"smooth",block:"center"});return;}
+ const fd=new FormData(e.target), data={};
+ for(const [k,v] of fd.entries()){if(data[k]) data[k]=Array.isArray(data[k])?[...data[k],v]:[data[k],v]; else data[k]=v}
+ data.sexual_wellness_score=[...document.querySelectorAll(".scoreQ")].reduce((a,x)=>a+(+x.value||0),0);
+ data.safety_review_required=[...document.querySelectorAll('input[name="safety"]:checked')].some(x=>x.value!=="None of these");
+ // V1.2 deliberately does not generate diagnostic bands or autonomous clinical conclusions.
+ data.patient=patientId; data.mobileLast4=last4; data.token=token; data.assessment="IntimaScan™ AI";
+ data.submitted_at=new Date().toISOString();
+ sessionStorage.setItem("intimascan_v1_submission",JSON.stringify(data));
+ const btn=document.getElementById("submitBtn"), status=document.getElementById("submitStatus");
+ btn.disabled=true; status.className="submitStatus"; status.textContent="Submitting securely for physician review…";
+ try{
+   const receipt=await sendToIntimaScanInbox(data);
+   status.className="submitStatus ok"; status.textContent="Submission received for physician review."; sessionStorage.setItem("intimascan_submission_id",receipt.submissionId||"");
+   e.target.classList.add("hidden");document.getElementById("complete").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});
+ }catch(err){
+   btn.disabled=false; status.className="submitStatus error"; status.textContent="Submission could not be sent. Please check the connection and try again.";
+   console.error("IntimaScan registry submission failed",err);
+ }
+});
+</script>
+</body></html>

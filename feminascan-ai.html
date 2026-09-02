@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FeminaScan™ AI V1.0 — Sri Venkateswara Empire AI Clinic</title>
+<style>
+:root{--bg:#061512;--card:#0b211c;--card2:#0e2a23;--gold:#d8b45b;--text:#f7f1df;--muted:#b9c8c2;--line:#29483f;--red:#ff8a80;--green:#8bd6ae}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#04110e,#082019 55%,#04110e);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.wrap{max-width:760px;margin:auto;padding:18px 14px 70px}.brand{text-align:center;padding:18px 8px 8px}.brand .kicker{color:var(--gold);letter-spacing:.16em;font-size:12px;text-transform:uppercase}
+h1{font-family:Georgia,serif;color:var(--gold);font-size:30px;margin:8px 0 2px}h2{font-size:20px;color:var(--gold);margin:0 0 12px}h3{font-size:16px;margin:16px 0 8px}
+.sub,.note{color:var(--muted)}.card{background:rgba(11,33,28,.96);border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 12px 32px #0005}
+.q{padding:14px 0;border-top:1px solid var(--line)}.q:first-of-type{border-top:0}label.title{display:block;font-weight:700;margin-bottom:8px}
+select,input[type=text],input[type=number],textarea{width:100%;background:#061713;color:var(--text);border:1px solid #36574d;border-radius:12px;padding:12px;font:inherit}
+textarea{min-height:86px}.checks label,.radios label{display:block;padding:7px 0}.checks input,.radios input{margin-right:8px;transform:scale(1.15)}
+.rangeRow{display:grid;grid-template-columns:1fr 64px;gap:10px;align-items:center}.rangeRow input[type=range]{width:100%;accent-color:var(--gold)}
+.score{font-size:28px;color:var(--gold);font-weight:800}.alert{border-color:#7b3e38;background:#2b1715}.alert strong{color:var(--red)}
+button{width:100%;border:0;border-radius:14px;padding:15px;font-weight:800;font-size:16px;cursor:pointer;background:linear-gradient(135deg,#d8b45b,#f1d78d);color:#172019}
+button.secondary{background:#16352c;color:var(--text);border:1px solid var(--line)}.hidden{display:none}.footer{text-align:center;color:#91a79f;font-size:12px;margin-top:22px}
+.badge{display:inline-block;border:1px solid #49675d;border-radius:999px;padding:4px 9px;color:#d7e4df;font-size:12px}.success{text-align:center;padding:26px 10px}.success .tick{font-size:42px;color:var(--green)}
+small{color:var(--muted)} .idgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.submitStatus{margin-top:10px;color:var(--muted);font-size:13px}.submitStatus.error{color:var(--red)}.submitStatus.ok{color:var(--green)}@media(max-width:600px){.idgrid{grid-template-columns:1fr}} .submitStatus{margin-top:10px;color:var(--muted);font-size:13px}.submitStatus.error{color:var(--red)}
+
+.branch{display:none}
+.branch.show{display:block}
+.private{border-color:#d8b66a}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="eyebrow">SRI VENKATESWARA EMPIRE AI CLINIC</div>
+<h1>FeminaScan™ AI</h1>
+<p>Confidential Women’s Intimate Wellness Assessment</p>
+</header>
+
+<form id="scanForm">
+<section class="card">
+<h2>Assessment Identification</h2>
+<p class="note">Used only to match this confidential assessment with your physician review.</p>
+<div class="idgrid">
+<div class="q"><label class="title">Patient name / identifier</label><input type="text" name="patient" id="patientName" maxlength="120" placeholder="Enter name or clinic identifier"></div>
+<div class="q"><label class="title">Mobile last 4 digits</label><input type="text" name="mobileLast4" id="mobileLast4" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="0000"></div>
+</div>
+<input type="hidden" name="token" id="patientToken">
+<small>If opened from Empire AI Assessment Launcher, available token details can be filled automatically.</small>
+</section>
+
+<section class="card"><h2>Before You Begin</h2>
+<p class="note">Please answer based mainly on your experience during the <b>previous 4 weeks</b>. Your answers are confidential. You may select Not Applicable / Prefer not to answer where appropriate.</p>
+<span class="badge">Physician-supervised • Confidential</span></section>
+
+<section class="card">
+<h2>Section A — Female Intimate Wellness Score</h2>
+<p class="note">10 questions × 10 points. Where N/A is selected, the displayed /100 score is normalized from the answered scored items.</p>
+<div id="scoreQuestions"></div>
+<div class="q"><b>Female Intimate Wellness Score</b><div class="score"><span id="score">0</span> /100</div>
+<small>The numerical interpretation is not displayed to the patient and is intended for physician review.</small></div>
+</section>
+
+<section class="card"><h2>Section B — Main Concern</h2>
+<div class="q checks"><label class="title">What would you most like help with? Choose all that apply.</label><div id="concerns"></div></div>
+</section>
+
+<section class="card"><h2>Section C — Duration</h2>
+<div class="q"><label class="title">How long have you noticed your main concern?</label><select name="duration"><option>No current concern</option><option>&lt;1 month</option><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option><option>&gt;1 year</option></select></div>
+<div class="q"><label class="title">Onset</label><select name="onset"><option>Sudden</option><option>Gradual</option><option>Unsure</option></select></div>
+<div class="q"><label class="title">Pattern</label><select name="pattern"><option>Constant</option><option>Intermittent</option><option>Situation-dependent</option><option>Variable</option></select></div>
+</section>
+
+<section class="card"><h2>Section D — Reproductive Stage</h2>
+<div class="q"><label class="title">Which best describes you?</label><select name="reproductive_stage" id="stage">
+<option>Regular menstrual cycles</option><option>Irregular menstrual cycles</option><option>Pregnant</option><option>Postpartum</option><option>Breastfeeding</option><option>Perimenopausal</option><option>Menopausal</option><option>Postmenopausal</option><option>Hysterectomy history</option><option>Unsure</option><option>Prefer not to answer</option>
+</select></div>
+<div class="q" id="lmpBox"><label class="title">Last menstrual period (where applicable)</label><input type="date" name="last_menstrual_period"></div>
+</section>
+
+<section class="card"><h2>Section E — Menstrual & Hormonal Context</h2>
+<div class="q checks"><label class="title">Do you currently experience:</label><div id="hormonalSymptoms"></div></div>
+<div class="q checks"><label class="title">Known history of:</label><div id="knownHistory"></div></div>
+<p class="note">These answers do not establish a diagnosis.</p>
+</section>
+
+<section class="card"><h2>Section F — Dryness & Intimate Comfort</h2>
+<div class="q"><label class="title">Do you experience vaginal/vulval dryness?</label><select name="dryness"><option>Never</option><option>Occasionally</option><option>Frequently</option></select></div>
+<div class="q"><label class="title">Pain during sexual activity?</label><select name="pain_activity" id="painActivity"><option>Never</option><option>Occasionally</option><option>Frequently</option><option>Not sexually active</option></select></div>
+<div id="painBranch" class="branch">
+<div class="q"><label class="title">Where is discomfort mainly felt?</label><select name="pain_location"><option>At/near the vaginal opening</option><option>Deeper internally</option><option>Both</option><option>Unsure</option></select></div>
+<div class="q"><label class="title">Severity</label><div class="rangeRow"><input type="range" min="0" max="10" value="0" name="pain_severity" oninput="this.nextElementSibling.value=this.value"><output>0</output></div></div>
+<div class="q"><label class="title">Pain after intimacy?</label><select name="pain_after"><option>No</option><option>Sometimes</option><option>Frequently</option></select></div>
+</div>
+</section>
+
+<section class="card"><h2>Section G — Vulval & Genitourinary Symptoms</h2>
+<div class="q checks"><label class="title">Do you currently have:</label><div id="guSymptoms"></div></div>
+<p class="note">Symptoms suggesting infection or another medical condition should be clinically evaluated, not interpreted as sexual dysfunction.</p>
+</section>
+
+<section class="card"><h2>Section H — Psychological & Relationship Context</h2>
+<div id="psychRanges"></div>
+<div class="q"><label class="title">Relationship/intimate satisfaction response</label><select name="relationship_option"><option value="">Use score above</option><option>Not currently partnered</option><option>Prefer not to answer</option></select></div>
+<div class="q"><label class="title">Do stress, anxiety or relationship factors seem to affect your intimate wellbeing?</label><select name="psych_contribution"><option>No</option><option>Possibly</option><option>Yes</option><option>Unsure</option></select></div>
+</section>
+
+<section class="card"><h2>Section I — Medication & Medical Context</h2>
+<div class="q"><label class="title">Are you taking regular medicines?</label><select name="regular_meds" id="regularMeds"><option>No</option><option>Yes</option></select></div>
+<div class="q branch" id="medBox"><label class="title">Medicines, if known</label><textarea name="medicines"></textarea></div>
+<div class="q checks"><label class="title">Are you currently using:</label><div id="medContexts"></div></div>
+<p class="note">This assessment never advises stopping medication because of a questionnaire result.</p>
+</section>
+
+<section class="card branch" id="pregnancyBranch"><h2>Section J — Pregnancy & Postpartum Branch</h2>
+<div class="q"><label class="title">Currently pregnant?</label><select name="currently_pregnant"><option>No</option><option>Yes</option></select></div>
+<div class="q"><label class="title">Recently delivered?</label><select name="recently_delivered" id="recentDelivery"><option>No</option><option>Yes</option></select></div>
+<div id="deliveryDetails" class="branch">
+<div class="q"><label class="title">Months since delivery</label><input type="number" min="0" max="60" name="months_since_delivery"></div>
+<div class="q"><label class="title">Breastfeeding?</label><select name="breastfeeding"><option>No</option><option>Yes</option></select></div>
+<div class="q"><label class="title">Delivery history</label><select name="delivery_history"><option>Vaginal</option><option>Caesarean</option><option>Assisted</option><option>Prefer not to answer</option></select></div>
+<div class="q"><label class="title">Significant birth injury/tear?</label><select name="birth_injury"><option>No</option><option>Yes</option><option>Unsure</option></select></div>
+</div>
+</section>
+
+<section class="card"><h2>Section K — Fertility Branch</h2>
+<div class="q"><label class="title">Are you currently trying to conceive?</label><select name="trying" id="trying"><option>No</option><option>Yes</option></select></div>
+<div id="fertilityBranch" class="branch">
+<div class="q"><label class="title">Duration</label><select name="trying_duration"><option>&lt;6 months</option><option>6–12 months</option><option>&gt;12 months</option></select></div>
+<div class="q"><label class="title">Have you previously undergone fertility evaluation/treatment?</label><select name="fertility_evaluation"><option>No</option><option>Yes</option></select></div>
+<p class="note">Relevant cases can be offered → AI Fertility Scan™</p>
+</div>
+</section>
+
+<section class="card"><h2>Section L — Lifestyle Snapshot</h2>
+<div class="q"><label class="title">Sleep quality</label><select name="sleep"><option>Poor</option><option>Fair</option><option>Good</option></select></div>
+<div class="q"><label class="title">Physical activity</label><select name="activity"><option>Low</option><option>Moderate</option><option>Regular</option></select></div>
+<div class="q"><label class="title">Current fatigue</label><select name="fatigue"><option>Low</option><option>Moderate</option><option>High</option></select></div>
+<div class="q"><label class="title">Tobacco/nicotine</label><select name="tobacco"><option>Never</option><option>Former</option><option>Current</option></select></div>
+<div class="q"><label class="title">Alcohol</label><select name="alcohol"><option>Never</option><option>Occasionally</option><option>Regularly</option></select></div>
+</section>
+
+<section class="card private"><h2>Section M — Confidential Safety Question</h2>
+<p class="note">This section is private.</p>
+<div class="q"><label class="title">Do you currently feel safe in your intimate relationship?</label><select name="relationship_safety" required><option value="">Select...</option><option>Yes</option><option>Sometimes unsure</option><option>No</option><option>Not applicable</option><option>Prefer not to answer</option></select></div>
+<div class="q"><label class="title">Have you experienced pressure, coercion or unwanted sexual activity?</label><select name="coercion" required><option value="">Select...</option><option>No</option><option>Yes</option><option>Prefer not to answer</option></select></div>
+<p class="note">Positive responses remain confidential and must not appear in a shared couple report.</p>
+</section>
+
+<section class="card alert"><h2>Section N — Medical Safety Screen</h2>
+<div class="q checks"><label class="title">Are you currently experiencing:</label><div id="medicalSafety"></div></div>
+<p class="note"><strong>Important:</strong> Relevant positive findings require physician review. Potentially urgent presentations should receive appropriate urgent medical assessment rather than routine AI reporting.</p>
+</section>
+
+<section class="card"><h2>Section O — Patient Goals</h2>
+<div class="q checks"><label class="title">What would you most like to improve? Choose up to three.</label><div id="goals"></div><small id="goalMsg"></small></div>
+</section>
+
+<section class="card">
+<p class="note"><b>Clinical notice:</b> The AI assessment alone does not diagnose a sexual, hormonal or gynaecological disorder. Submitted information is intended to support physician review.</p>
+<button id="submitBtn" type="submit">Complete FeminaScan™</button><div id="submitStatus" class="submitStatus"></div>
+</section>
+</form>
+
+<section id="complete" class="card success hidden">
+<div class="tick">✓</div><h2>FeminaScan™ AI Completed</h2>
+<p>Your confidential Women's Intimate Wellness Assessment has been completed.</p>
+<p class="note">Your responses will be considered together with relevant reproductive, hormonal, medical, emotional and lifestyle factors during physician review.</p>
+<p><b>The AI assessment alone does not diagnose a sexual, hormonal or gynaecological disorder.</b></p>
+<button class="secondary" onclick="location.reload()">Return</button>
+</section>
+<div class="footer">FeminaScan™ AI • Physician-supervised women’s intimate wellness assessment</div>
+</div>
+
+<script>
+const ENDPOINT="https://script.google.com/macros/s/AKfycbwAFC547exE6OIR9Ms77c5SLwr0JdFjXnpBTAgbOqJicQ6SuWhIpbxT9NGqgBRNF3sJNA/exec";
+
+const scored=[
+ ["Sexual desire / interest",["Very poor","Poor","Reduced","Moderate","Good","Very good"],false],
+ ["Sexual arousal",["Very difficult","Poor","Reduced","Moderate","Good","Very good"],false],
+ ["Natural lubrication / intimate comfort",["Very poor","Poor","Reduced","Moderate","Good","Very good"],true],
+ ["Comfort during sexual activity",["Severe discomfort","Frequent significant discomfort","Regular discomfort","Occasional mild discomfort","Generally comfortable","Completely comfortable"],true],
+ ["Orgasmic response / satisfaction",["Very poor","Poor","Reduced","Moderate","Good","Very good"],true],
+ ["Sexual confidence & body comfort",["Very low","Low","Reduced","Moderate","Good","Very good"],false],
+ ["Intimate relationship satisfaction",["Very dissatisfied","Dissatisfied","Reduced","Moderate","Satisfied","Very satisfied"],true],
+ ["Communication about intimate needs",["Very difficult","Difficult","Reduced","Moderate","Comfortable","Very comfortable"],true],
+ ["Satisfaction with frequency of intimacy",["Very dissatisfied","Dissatisfied","Reduced","Moderate","Satisfied","Very satisfied"],true],
+ ["Overall intimate & sexual wellbeing",["Very poor","Poor","Reduced","Moderate","Good","Excellent"],false]
+];
+const sq=document.getElementById("scoreQuestions");
+scored.forEach((q,i)=>{
+ let opts=q[1].map((x,j)=>`<option value="${j*2}">${x} — ${j*2}</option>`).join("");
+ if(q[2]) opts += `<option value="NA">Not Applicable / Prefer not to answer</option>`;
+ let d=document.createElement("div"); d.className="q";
+ d.innerHTML=`<label class="title">${i+1}. ${q[0]}</label><select class="scoreQ" name="score_${i+1}" required><option value="" selected disabled>Select...</option>${opts}</select>`;
+ sq.appendChild(d);
+});
+function calcScore(){
+ const vals=[...document.querySelectorAll(".scoreQ")].map(x=>x.value).filter(v=>v!==""&&v!=="NA").map(Number);
+ const raw=vals.reduce((a,b)=>a+b,0);
+ const normalized=vals.length ? Math.round(raw/(vals.length*10)*100) : 0;
+ document.getElementById("score").textContent=normalized;
+ return {raw,answered:vals.length,normalized};
+}
+document.querySelectorAll(".scoreQ").forEach(x=>x.addEventListener("change",calcScore));
+
+function checks(id,name,items){
+ document.getElementById(id).innerHTML=items.map(x=>`<label><input type="checkbox" name="${name}" value="${x}">${x}</label>`).join("");
+}
+checks("concerns","concern",["Reduced sexual desire","Difficulty becoming aroused","Vaginal dryness","Pain/discomfort during intimacy","Difficulty reaching orgasm","Reduced intimate satisfaction","Reduced sexual confidence","Performance/intimacy anxiety","Relationship/intimate communication","Menopause-related intimate changes","Postpartum intimate changes","Fertility concern","Genital/vulval discomfort","Preventive intimate wellness assessment","Other"]);
+checks("hormonalSymptoms","hormonal_symptom",["Irregular periods","Very painful periods","Heavy menstrual bleeding","Missed periods","Significant premenstrual symptoms","Hot flushes","Night sweats","Vaginal dryness","None","Other"]);
+checks("knownHistory","known_history",["PCOS","Endometriosis","Fibroids","Thyroid disorder","Diabetes/prediabetes","Anaemia","Other hormonal/reproductive condition","None known"]);
+checks("guSymptoms","gu_symptom",["Itching","Burning","Irritation","Unusual discharge","Unusual odour","Urinary burning","Frequent urinary symptoms","Genital sores/lesions","Bleeding after intimacy","None"]);
+checks("medContexts","med_context",["Hormonal contraception","Menopausal hormone therapy","Fertility medication","Antidepressant/psychotropic medication","Other hormonal treatment","None","Prefer not to answer"]);
+checks("medicalSafety","medical_safety",["Severe pelvic/lower abdominal pain","Heavy/unusual bleeding","Bleeding after sexual activity","Fever with pelvic/genital symptoms","New genital ulcer/lesion","Significant genital swelling","Severe urinary symptoms","Possible pregnancy with significant pain or bleeding","None"]);
+checks("goals","goal",["Sexual desire","Arousal","Lubrication","Intimate comfort","Orgasmic satisfaction","Sexual confidence","Body confidence","Intimate communication","Relationship satisfaction","Menopause-related intimate wellbeing","Postpartum intimate wellbeing","Fertility preparedness","Understanding my sexual health","Preventive intimate wellness","Other"]);
+
+function enforceExclusive(group,ex){
+ const boxes=[...document.querySelectorAll(`input[name="${group}"]`)];
+ boxes.forEach(b=>b.addEventListener("change",()=>{
+  if(!b.checked)return;
+  if(b.value===ex) boxes.forEach(o=>{if(o!==b)o.checked=false});
+  else {const e=boxes.find(x=>x.value===ex); if(e)e.checked=false;}
+ }));
+}
+enforceExclusive("hormonal_symptom","None");
+enforceExclusive("known_history","None known");
+enforceExclusive("gu_symptom","None");
+enforceExclusive("med_context","None");
+enforceExclusive("medical_safety","None");
+
+const psych=[["Current stress","stress10"],["Anxiety affecting intimacy","anxiety10"],["Intimate confidence","confidence10"],["Overall emotional wellbeing","emotional10"],["Relationship/intimate satisfaction","relationship10"]];
+document.getElementById("psychRanges").innerHTML=psych.map(([t,n])=>`<div class="q"><label class="title">${t}</label><div class="rangeRow"><input type="range" min="0" max="10" value="5" name="${n}" oninput="this.nextElementSibling.value=this.value"><output>5</output></div></div>`).join("");
+
+document.getElementById("painActivity").onchange=e=>document.getElementById("painBranch").classList.toggle("show",["Occasionally","Frequently"].includes(e.target.value));
+document.getElementById("regularMeds").onchange=e=>document.getElementById("medBox").classList.toggle("show",e.target.value==="Yes");
+document.getElementById("trying").onchange=e=>document.getElementById("fertilityBranch").classList.toggle("show",e.target.value==="Yes");
+document.getElementById("recentDelivery").onchange=e=>document.getElementById("deliveryDetails").classList.toggle("show",e.target.value==="Yes");
+function stageBranch(){
+ const s=document.getElementById("stage").value;
+ const relevant=["Pregnant","Postpartum","Breastfeeding"].includes(s);
+ document.getElementById("pregnancyBranch").classList.toggle("show",relevant);
+}
+document.getElementById("stage").addEventListener("change",stageBranch); stageBranch();
+
+document.querySelectorAll('input[name="goal"]').forEach(c=>c.addEventListener("change",()=>{
+ let a=[...document.querySelectorAll('input[name="goal"]:checked')];
+ if(a.length>3){c.checked=false;document.getElementById("goalMsg").textContent="Please choose up to three goals."}
+ else document.getElementById("goalMsg").textContent=`${a.length}/3 selected`;
+}));
+
+(function prefillIdentity(){
+ const p=new URLSearchParams(location.search);
+ const token=p.get("token")||"", patient=p.get("patient")||"";
+ const last4=(p.get("last4")||p.get("mobileLast4")||"").replace(/\D/g,"").slice(-4);
+ if(token)document.getElementById("patientToken").value=token;
+ if(patient)document.getElementById("patientName").value=patient;
+ if(last4)document.getElementById("mobileLast4").value=last4;
+})();
+
+async function sendFemina(data){
+ const res=await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"submitFeminaScan",payload:data})});
+ const text=await res.text(); let out; try{out=JSON.parse(text)}catch(_){throw new Error("Invalid registry response")}
+ if(!out||out.status!=="success")throw new Error((out&&out.message)||"Submission was not accepted");
+ return out;
+}
+
+document.getElementById("scanForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const patient=(document.getElementById("patientName").value||"").trim();
+ const last4=(document.getElementById("mobileLast4").value||"").replace(/\D/g,"");
+ const token=(document.getElementById("patientToken").value||"").trim();
+ if(!patient&&!last4&&!token){alert("Please enter your patient name/identifier or mobile last 4 digits.");return;}
+ if(last4&&last4.length!==4){alert("Please enter exactly the last 4 digits of the mobile number.");return;}
+ if(!document.querySelector('input[name="medical_safety"]:checked')){alert("Please answer the Medical Safety Screen.");return;}
+ if(!document.querySelector('input[name="goal"]:checked')){alert("Please select at least one patient goal.");return;}
+ const fd=new FormData(e.target), data={};
+ for(const [k,v] of fd.entries()){if(data[k])data[k]=Array.isArray(data[k])?[...data[k],v]:[data[k],v];else data[k]=v}
+ const sc=calcScore();
+ data.female_intimate_wellness_score=sc.normalized;
+ data.score_raw=sc.raw; data.score_answered=sc.answered;
+ data.medical_safety_review_required=[...document.querySelectorAll('input[name="medical_safety"]:checked')].some(x=>x.value!=="None");
+ data.private_safety_review_required=(data.relationship_safety==="No"||data.relationship_safety==="Sometimes unsure"||data.coercion==="Yes");
+ data.patient=patient;data.mobileLast4=last4;data.token=token;data.assessment="FeminaScan™ AI";data.submitted_at=new Date().toISOString();
+ sessionStorage.setItem("feminascan_v1_submission",JSON.stringify(data));
+ const btn=document.getElementById("submitBtn"), status=document.getElementById("submitStatus");
+ btn.disabled=true;status.textContent="Submitting securely for physician review…";
+ try{
+  const receipt=await sendFemina(data);
+  sessionStorage.setItem("feminascan_submission_id",receipt.submissionId||"");
+  e.target.classList.add("hidden");document.getElementById("complete").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});
+ }catch(err){
+  btn.disabled=false;status.className="submitStatus error";status.textContent="Submission could not be sent: "+(err && err.message ? err.message : "Registry connection error");console.error("FeminaScan submission error:",err);
+ }
+});
+</script>
+</body></html>

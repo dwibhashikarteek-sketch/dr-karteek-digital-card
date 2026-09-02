@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Empire AI Assessment Launcher™ | Sri Venkateswara Empire AI Clinic</title>
+<style>
+:root{--bg:#061612;--card:#0c1f1a;--gold:#d8b66a;--gold2:#f0d796;--text:#f6f3ea;--muted:#bfc9c3;--line:rgba(216,182,106,.28);--ok:#bfe7cf}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:22px 14px;font-family:Georgia,"Times New Roman",serif;color:var(--text);background:radial-gradient(circle at top,#15382d 0,#081c17 38%,#04110e 100%)}
+.wrap{max-width:720px;margin:auto}.brand{text-align:center;margin-bottom:18px}.badge{display:inline-block;border:1px solid var(--line);color:var(--gold2);padding:6px 12px;border-radius:999px;font-size:12px;letter-spacing:.12em}h1{margin:12px 0 6px;color:var(--gold2);font-size:32px}.sub{color:var(--muted);line-height:1.5}.card{background:linear-gradient(180deg,rgba(18,48,39,.96),rgba(7,24,19,.96));border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 20px 50px rgba(0,0,0,.28)}h2{color:var(--gold2);margin:0 0 10px}.status{color:var(--ok);font-weight:700}.meta{margin:16px 0;padding:14px;border:1px solid var(--line);border-radius:14px;background:#071a15}.meta div{margin:7px 0;color:var(--muted)}.meta strong{color:var(--text)}.btn{display:block;text-decoration:none;text-align:center;border:1px solid #e8cf8e;border-radius:14px;padding:14px 16px;background:linear-gradient(180deg,#e3c77f,#b78d38);color:#102016;font-weight:700}.note{font-size:12px;color:#9fb0a8;line-height:1.55;margin-top:12px}.error{color:#f0d796;border-left:3px solid var(--gold);padding:12px 14px;background:rgba(216,182,106,.08);border-radius:10px}.hidden{display:none}@media(max-width:520px){h1{font-size:28px}.card{padding:17px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="badge">SRI VENKATESWARA EMPIRE AI CLINIC</div>
+    <h1>Empire AI Assessment Launcher™</h1>
+    <div class="sub">Private • Token-linked • Physician-supervised assessment routing</div>
+  </div>
+  <div class="card">
+    <div id="ready" class="hidden">
+      <h2 id="scanTitle">Assigned AI Assessment</h2>
+      <p class="status">Assessment assignment verified ✓</p>
+      <div class="meta">
+        <div>Token: <strong id="tokenView">—</strong></div>
+        <div>Patient identifier: <strong id="patientView">—</strong></div>
+        <div>Mobile last 4: <strong id="last4View">—</strong></div>
+      </div>
+      <a id="startLink" class="btn" href="#">START ASSESSMENT →</a>
+      <div class="note">Only the minimum check-in identifiers are carried to the assessment. Clinical answers remain inside the assessment workflow and are submitted for physician review.</div>
+    </div>
+    <div id="blocked" class="hidden">
+      <h2>Assessment Assignment</h2>
+      <div class="error" id="blockedMessage">The assigned assessment is not available yet.</div>
+      <div class="note">Please return to the clinic workflow. No clinical data has been submitted from this page.</div>
+    </div>
+  </div>
+</div>
+<script>
+// Exact 18-scan catalogue. Only modules marked active can launch.
+const CATALOGUE = {
+  intimascan:{name:"IntimaScan™ AI",page:"intimascan-ai.html",active:true},
+  feminascan:{name:"FeminaScan™ AI",page:"feminascan-ai.html",active:true},
+  fertility:{name:"AI Fertility Scan™",page:"AI_FERTILITY_SCAN.html",active:false},
+  couple:{name:"AI Couple Wellness Scan™",page:"AI_COUPLE_WELLNESS_SCAN.html",active:false},
+  mind:{name:"Empire AI Mind Scan™",page:"EMPIRE_AI_MIND_SCAN.html",active:false},
+  sleep:{name:"AI Sleep Scan™",page:"AI_SLEEP_SCAN.html",active:false},
+  vitality:{name:"AI Vitality Scan™",page:"AI_VITALITY_SCAN.html",active:false},
+  lifestyle:{name:"AI Lifestyle Scan™",page:"AI_LIFESTYLE_SCAN.html",active:false},
+  face:{name:"AI Face Scan™",page:"AI_FACE_SCAN.html",active:false},
+  hair:{name:"AI Hair Scan™",page:"AI_HAIR_SCAN.html",active:false},
+  body:{name:"AI Body Analysis™",page:"AI_BODY_ANALYSIS.html",active:false},
+  metabolic:{name:"AI Metabolic Scan™",page:"AI_METABOLIC_SCAN.html",active:false},
+  acuscan:{name:"Empire AI AcuScan™",page:"EMPIRE_AI_ACUSCAN.html",active:false},
+  spine:{name:"AI Spine & Posture Scan™",page:"AI_SPINE_POSTURE_SCAN.html",active:false},
+  pain:{name:"AI Pain & Mobility Scan™",page:"AI_PAIN_MOBILITY_SCAN.html",active:false},
+  constitutional:{name:"Empire AI Constitutional Wellness Scan™",page:"EMPIRE_AI_CONSTITUTIONAL_WELLNESS_SCAN.html",active:false},
+  cardiometabolic:{name:"AI CardioMetabolic Scan™",page:"AI_CARDIOMETABOLIC_SCAN.html",active:false},
+  healthyageing:{name:"AI Healthy Ageing Scan™",page:"AI_HEALTHY_AGEING_SCAN.html",active:false}
+};
+
+const q=new URLSearchParams(location.search);
+const scanKey=(q.get("scan")||"").toLowerCase().trim();
+const token=(q.get("token")||"").toUpperCase().trim();
+const patient=(q.get("patient")||"").trim();
+const last4=(q.get("last4")||"").replace(/\D/g,"").slice(-4);
+const scan=CATALOGUE[scanKey];
+const ready=document.getElementById("ready");
+const blocked=document.getElementById("blocked");
+
+if(!scan){
+  document.getElementById("blockedMessage").textContent="No valid AI assessment assignment was found.";
+  blocked.classList.remove("hidden");
+}else if(!scan.active){
+  document.getElementById("blockedMessage").textContent=scan.name+" is registered in the Empire AI catalogue but its clinical module has not yet been activated.";
+  blocked.classList.remove("hidden");
+}else if(!token || !patient || last4.length!==4){
+  document.getElementById("blockedMessage").textContent="The assessment link is missing required check-in identification. Please reopen it from Empire Smart Check-In™.";
+  blocked.classList.remove("hidden");
+}else{
+  document.getElementById("scanTitle").textContent=scan.name;
+  document.getElementById("tokenView").textContent=token;
+  document.getElementById("patientView").textContent=patient;
+  document.getElementById("last4View").textContent=last4;
+  const params=new URLSearchParams({token,patient,last4});
+  document.getElementById("startLink").href=scan.page+"?"+params.toString();
+  ready.classList.remove("hidden");
+}
+</script>
+</body>
+</html>

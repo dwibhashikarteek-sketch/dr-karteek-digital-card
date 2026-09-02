@@ -113,6 +113,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
         <option>Other</option>
       </select>
 
+      <div id="aiScanField" class="hidden">
+        <label for="assignedScan">AI assessment</label>
+        <select id="assignedScan" name="assignedScan">
+          <option value="">Select assessment</option>
+          <option value="intimascan">IntimaScan™ AI</option>
+          <option value="feminascan">FeminaScan™ AI</option>
+        </select>
+        <div class="note">Choose the assessment recommended for this visit. Only currently active patient modules are shown.</div>
+      </div>
+
       <label>
         <input id="consent" type="checkbox" required style="width:auto;margin-right:8px">
         I confirm that I am physically present at the clinic and wish to check in.
@@ -135,6 +145,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
         Your phone will let you know when the doctor is ready.
       </div>
       <a id="queueLink" class="btn primary queueBtn" href="empire-live-smart-queue-PRODUCTION.html">VIEW MY LIVE QUEUE →</a>
+
+      <div id="aiAssessmentBlock" class="hidden" style="margin-top:12px">
+        <a id="aiAssessmentLink" class="btn" href="#">START ASSIGNED AI ASSESSMENT →</a>
+        <p class="note" id="aiAssessmentNote" style="margin-top:8px">Your assigned AI assessment will open securely. Your token, name and mobile last 4 will be carried forward automatically.</p>
+      </div>
+
       <p class="note">Your queue status is private and token-based. Keep this page or the Live Queue page available while you wait.</p>
       <button onclick="resetForm()">New Check-In</button>
     </div>
@@ -154,6 +170,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 <script>
 const ENDPOINT = "https://script.google.com/macros/s/AKfycbyNj-Yxv_yyARgJS9ghpdWJG2LTEg35Cx1jIZOBlR1jDQ4EJbN1LhbleNQ6kARNO0pK/exec";
 const QUEUE_PAGE = "empire-live-smart-queue-PRODUCTION.html";
+const AI_LAUNCHER_PAGE = "empire-ai-assessment-launcher.html";
 let selectedType = "";
 
 function chooseType(type){
@@ -178,7 +195,16 @@ function resetForm(){
   localStorage.removeItem("empireQueueToken");
   localStorage.removeItem("empireQueueLast4");
   localStorage.removeItem("empireQueueSavedAt");
+  document.getElementById("aiAssessmentBlock").classList.add("hidden");
+  document.getElementById("aiAssessmentLink").removeAttribute("href");
 }
+
+document.getElementById("visitReason").addEventListener("change", e=>{
+  const isAI=e.target.value === "AI Assessment";
+  document.getElementById("aiScanField").classList.toggle("hidden", !isAI);
+  document.getElementById("assignedScan").required=isAI;
+  if(!isAI) document.getElementById("assignedScan").value="";
+});
 
 document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
   e.preventDefault();
@@ -220,6 +246,31 @@ document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
     document.getElementById("checkinForm").classList.add("hidden");
     document.getElementById("token").textContent = token;
     document.getElementById("queueLink").href = QUEUE_PAGE;
+
+    // AI Assessment handoff: no clinical data is placed in the URL.
+    // Only the minimum identifiers already collected at check-in are carried forward.
+    const aiBlock = document.getElementById("aiAssessmentBlock");
+    const aiLink = document.getElementById("aiAssessmentLink");
+    if(payload.visitReason === "AI Assessment"){
+      // Production handoff: never silently default an AI Assessment to a clinical module.
+      // A physician-side preassignment (URL/localStorage) may override the patient-visible selector.
+      const incoming = new URLSearchParams(location.search);
+      const assignedScan = incoming.get("scan") || localStorage.getItem("empireAssignedAIScan") || document.getElementById("assignedScan").value;
+      if(!["intimascan","feminascan"].includes(assignedScan)) throw new Error("A valid active AI assessment must be selected.");
+      const params = new URLSearchParams({
+        scan: assignedScan,
+        token,
+        patient: payload.name,
+        last4
+      });
+      aiLink.href = AI_LAUNCHER_PAGE + "?" + params.toString();
+      document.getElementById("aiAssessmentNote").textContent = "Assigned assessment: " + (assignedScan === "feminascan" ? "FeminaScan™ AI" : "IntimaScan™ AI") + ". Your token, name and mobile last 4 will be carried forward automatically.";
+      aiBlock.classList.remove("hidden");
+    } else {
+      aiBlock.classList.add("hidden");
+      aiLink.removeAttribute("href");
+    }
+
     document.getElementById("success").classList.remove("hidden");
   }catch(err){
     console.error(err);
