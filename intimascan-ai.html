@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>IntimaScan™ AI V1.2.1 — Confidential Men's Sexual Wellness Assessment</title>
+<title>IntimaScan™ AI V1.2.1 DIAGNOSTIC — Confidential Men's Sexual Wellness Assessment</title>
 <style>
 :root{--bg:#061512;--card:#0b211c;--card2:#0e2a23;--gold:#d8b45b;--text:#f7f1df;--muted:#b9c8c2;--line:#29483f;--red:#ff8a80;--green:#8bd6ae}
 *{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#04110e,#082019 55%,#04110e);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
@@ -183,9 +183,19 @@ const INTIMASCAN_REGISTRY_ENDPOINT = "https://script.google.com/macros/s/AKfycbw
 async function sendToIntimaScanInbox(data){
  const payload={action:"submitIntimaScan",payload:data};
  const res=await fetch(INTIMASCAN_REGISTRY_ENDPOINT,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
- const text=await res.text();
- let out; try{out=JSON.parse(text)}catch(_){throw new Error("Invalid registry response")};
- if(!out || out.status!=="success") throw new Error((out&&out.message)||"Submission was not accepted");
+ const raw=await res.text();
+ let out;
+ try{
+   out=JSON.parse(raw);
+ }catch(_){
+   throw new Error(`HTTP ${res.status} • Non-JSON response: ${raw.slice(0,500) || "(empty response)"}`);
+ }
+ if(!res.ok){
+   throw new Error(`HTTP ${res.status} • ${out.message || raw.slice(0,500) || "Request failed"}`);
+ }
+ if(!out || out.status!=="success") {
+   throw new Error(`Backend response: ${JSON.stringify(out).slice(0,700)}`);
+ }
  return out;
 }
 
@@ -233,8 +243,11 @@ document.getElementById("scanForm").addEventListener("submit",async e=>{
    status.className="submitStatus ok"; status.textContent="Submission received for physician review."; sessionStorage.setItem("intimascan_submission_id",receipt.submissionId||"");
    e.target.classList.add("hidden");document.getElementById("complete").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});
  }catch(err){
-   btn.disabled=false; status.className="submitStatus error"; status.textContent="Submission could not be sent. Please check the connection and try again.";
+   btn.disabled=false;
+   status.className="submitStatus error";
+   status.textContent="DIAGNOSTIC: " + (err && err.message ? err.message : String(err));
    console.error("IntimaScan registry submission failed",err);
+   try{ alert("IntimaScan diagnostic response:\n\n" + (err && err.message ? err.message : String(err))); }catch(_){}
  }
 });
 </script>
