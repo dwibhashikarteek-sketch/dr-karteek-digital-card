@@ -1,0 +1,140 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Couple Wellness Scan™</title>
+<style>
+body{margin:0;background:#001b15;color:#f6f1e5;font-family:Arial,sans-serif}main{max-width:760px;margin:auto;padding:30px 20px 70px}
+.brand{text-align:center;letter-spacing:.14em;color:#e2bd63}.title{text-align:center;color:#e2bd63;font:700 42px Georgia;margin:18px 0 8px}
+.sub{text-align:center;font-size:19px;line-height:1.5}.card{background:#062d23;border:1px solid #386052;border-radius:24px;padding:24px;margin:20px 0}
+h2{color:#e2bd63;font:700 26px Georgia}h3{color:#e2bd63}label{display:block;font-weight:700;margin:17px 0 8px}
+select,input,textarea{width:100%;box-sizing:border-box;background:#001c16;color:#fff;border:1px solid #54766b;border-radius:14px;padding:14px;font-size:16px}
+.opt{font-weight:400;margin:8px 0;display:flex;gap:10px;align-items:flex-start}.opt input{width:auto}.notice{line-height:1.55;color:#c8d0cc;border-left:4px solid #e2bd63;padding:10px 14px}
+.private{border:1px solid #9a6b48;background:#14251f}.btn{width:100%;border:0;border-radius:18px;padding:17px;background:#e2bd63;font-size:18px;font-weight:800}
+.err{color:#ffb1aa}.muted{color:#bec8c3;line-height:1.55}.scoregrid{display:grid;grid-template-columns:1fr;gap:12px}.done{text-align:center;padding:25px}
+.hidden{display:none}.small{font-size:13px;color:#bfc9c4}
+</style></head><body><main>
+<div class="brand">SRI VENKATESWARA EMPIRE AI CLINIC</div>
+<div class="title">AI Couple Wellness Scan™</div>
+<div class="sub">Confidential Relationship, Communication &amp; Intimacy Assessment</div>
+
+<form id="form">
+<div class="card"><h2>Assessment Identification</h2>
+<p class="notice">Complete this assessment privately and independently. Your individual answers are confidential. Sensitive safety responses are never automatically shown to your partner or placed in a shared couple report.</p>
+<label>Patient name / identifier</label><input id="patient" name="patient" required>
+<label>Mobile last 4 digits</label><input id="last4" name="mobileLast4" maxlength="4" inputmode="numeric" required>
+<input type="hidden" id="token" name="token">
+<label>I am</label><select name="partner_role" required><option value="">Select</option><option>Partner A</option><option>Partner B</option><option>Completing an individual relationship assessment</option></select>
+<label>Relationship duration</label><select name="relationship_duration"><option value="">Select</option><option>&lt;1 year</option><option>1–3 years</option><option>3–5 years</option><option>5–10 years</option><option>&gt;10 years</option></select>
+<label>Current relationship status</label><select name="relationship_status"><option value="">Select</option><option>Married</option><option>Engaged</option><option>Long-term relationship</option><option>Other</option><option>Prefer not to answer</option></select>
+</div>
+
+<div class="card"><h2>Couple Wellness Score</h2><p class="muted">10 questions. Each score remains individual; Partner A and Partner B scores are never averaged into a “relationship health percentage.”</p>
+<div class="scoregrid">
+<label>1. Emotional Connection — how connected do you currently feel?<select class="scoreQ" name="score_emotional" required><option value="">Select</option><option value="0">0 — Very disconnected</option><option value="2">2 — Poor</option><option value="4">4 — Reduced</option><option value="6">6 — Moderate</option><option value="8">8 — Strong</option><option value="10">10 — Very strong</option></select></label>
+<label>2. Communication — satisfaction with communication<select class="scoreQ" name="score_communication" required><option value="">Select</option><option value="0">0 — Very dissatisfied</option><option value="2">2</option><option value="4">4</option><option value="6">6</option><option value="8">8</option><option value="10">10 — Very satisfied</option></select></label>
+<label>3. Mutual Respect — how respected and valued do you feel?<select class="scoreQ" name="score_respect" required><option value="">Select</option><option value="0">0 — Not at all</option><option value="2">2</option><option value="4">4</option><option value="6">6</option><option value="8">8</option><option value="10">10 — Completely</option></select></label>
+<label>4. Trust<select class="scoreQ" name="score_trust" required><option value="">Select</option><option value="0">0 — Very poor</option><option value="2">2</option><option value="4">4</option><option value="6">6</option><option value="8">8</option><option value="10">10 — Very strong</option></select></label>
+<label>5. Affection &amp; Non-Sexual Intimacy<select class="scoreQ" name="score_affection" required><option value="">Select</option><option value="0">0 — Very poor</option><option value="2">2</option><option value="4">4</option><option value="6">6</option><option value="8">8</option><option value="10">10 — Excellent</option></select></label>
+<label>6. Sexual/Intimate Satisfaction<select class="scoreQ optionalScore" name="score_sexual"><option value="">N/A / Prefer not to answer</option><option value="0">0 — Very dissatisfied</option><option value="2">2</option><option value="4">4</option><option value="6">6</option><option value="8">8</option><option value="10">10 — Very satisfied</option></select></label>
+<label>7. Communication About Intimacy<select class="scoreQ" name="score_intimacy_communication" required><option value="">Select</option><option value="0">0 — Very uncomfortable</option><option value="2">2</option><option value="4">4</option><option value="6">6</option><option value="8">8</option><option value="10">10 — Very comfortable</option></select></label>
+<label>8. Conflict Resolution<select class="scoreQ" name="score_conflict" required><option value="">Select</option><option value="0">0 — Very poorly</option><option value="2">2</option><option value="4">4</option><option value="6">6</option><option value="8">8</option><option value="10">10 — Very well</option></select></label>
+<label>9. Mutual Support<select class="scoreQ" name="score_support" required><option value="">Select</option><option value="0">0 — Not supported</option><option value="2">2</option><option value="4">4</option><option value="6">6</option><option value="8">8</option><option value="10">10 — Very well supported</option></select></label>
+<label>10. Overall Relationship Satisfaction<select class="scoreQ" name="score_overall" required><option value="">Select</option><option value="0">0 — Very dissatisfied</option><option value="2">2</option><option value="4">4</option><option value="6">6</option><option value="8">8</option><option value="10">10 — Very satisfied</option></select></label>
+</div></div>
+
+<div class="card"><h2>Main Relationship Concern</h2><p class="small">Choose up to three.</p><div id="concerns"></div></div>
+<div class="card"><h2>Communication</h2>
+<label>How often do you feel genuinely heard?</label><select name="heard"><option>Rarely</option><option>Sometimes</option><option>Usually</option><option>Almost always</option></select>
+<label>Comfort discussing difficult topics (0–10)</label><input type="number" min="0" max="10" name="difficult_topics">
+<label>Do conversations frequently become arguments?</label><select name="arguments"><option>Never</option><option>Occasionally</option><option>Frequently</option></select>
+<label>Do you avoid important conversations?</label><select name="avoid_conversations"><option>Never</option><option>Sometimes</option><option>Frequently</option></select>
+<label>Are misunderstandings common?</label><select name="misunderstandings"><option>Rare</option><option>Occasional</option><option>Frequent</option></select></div>
+
+<div class="card"><h2>Emotional Connection</h2>
+<label>Emotionally close?</label><select name="emotionally_close"><option>Very little</option><option>Somewhat</option><option>Mostly</option><option>Very much</option></select>
+<label>Feel appreciated?</label><select name="appreciated"><option>Rarely</option><option>Sometimes</option><option>Usually</option><option>Consistently</option></select>
+<label>Meaningful time together?</label><select name="meaningful_time"><option>Rarely</option><option>Occasionally</option><option>Regularly</option></select>
+<label>Supported during difficult periods?</label><select name="difficult_support"><option>Rarely</option><option>Sometimes</option><option>Usually</option><option>Consistently</option></select></div>
+
+<div class="card"><h2>Affection &amp; Intimacy</h2>
+<label>Satisfied with non-sexual affection?</label><select name="nonsexual_affection"><option>Yes</option><option>Partly</option><option>No</option></select>
+<label>Satisfied with sexual intimacy?</label><select name="sexual_intimacy"><option>Yes</option><option>Partly</option><option>No</option><option>N/A</option></select>
+<label>Has intimacy changed significantly?</label><select name="intimacy_change"><option>No</option><option>Increased</option><option>Reduced</option><option>Variable</option></select>
+<label>If reduced, approximately for</label><select name="intimacy_reduced_duration"><option value="">N/A</option><option>&lt;1 month</option><option>1–3 months</option><option>3–6 months</option><option>6–12 months</option><option>&gt;1 year</option></select></div>
+
+<div class="card"><h2>Intimacy Alignment — Private</h2>
+<label>Desired intimate frequency</label><select name="desired_frequency"></select>
+<label>Current intimate frequency</label><select name="current_frequency"></select>
+<label>Satisfaction with frequency (0–10)</label><input type="number" min="0" max="10" name="frequency_satisfaction">
+<label>Satisfaction with affection (0–10)</label><input type="number" min="0" max="10" name="affection_satisfaction">
+<label>Sexual desire satisfaction (0–10)</label><input type="number" min="0" max="10" name="desire_satisfaction">
+<label>Comfort initiating intimacy (0–10)</label><input type="number" min="0" max="10" name="comfort_initiating">
+<label>Comfort declining intimacy (0–10)</label><input type="number" min="0" max="10" name="comfort_declining">
+<label>Comfort expressing preferences (0–10)</label><input type="number" min="0" max="10" name="comfort_preferences">
+<p class="notice">Differences between partners describe alignment only. Difference does not equal dysfunction.</p></div>
+
+<div class="card"><h2>Sexual Wellness Branch</h2>
+<label>Is a sexual health concern affecting the relationship?</label><select name="sexual_health_affecting"><option>No</option><option>Possibly</option><option>Yes</option></select><div id="sexualFactors"></div>
+<p class="muted">Relevant concerns may support physician routing to IntimaScan™ AI and/or FeminaScan™ AI. This scan does not duplicate those detailed assessments.</p></div>
+
+<div class="card"><h2>Stressors Affecting the Couple</h2><div id="stressors"></div><label>Overall external stress burden (0–10)</label><input type="number" min="0" max="10" name="external_stress"></div>
+
+<div class="card"><h2>Emotional Wellness</h2>
+<label>Current personal stress (0–10)</label><input type="number" min="0" max="10" name="personal_stress">
+<label>Anxiety/worry (0–10)</label><input type="number" min="0" max="10" name="anxiety">
+<label>Mood burden (0–10)</label><input type="number" min="0" max="10" name="mood">
+<label>Emotional exhaustion (0–10)</label><input type="number" min="0" max="10" name="exhaustion">
+<label>Relationship-related distress (0–10)</label><input type="number" min="0" max="10" name="relationship_distress">
+<p class="muted">Prominent individual psychological burden may support private physician routing to Empire AI Mind Scan™.</p></div>
+
+<div class="card"><h2>Conflict Pattern</h2>
+<label>How often do significant disagreements occur?</label><select name="disagreement_frequency"><option>Rarely</option><option>Monthly</option><option>Weekly</option><option>Several times weekly</option><option>Very frequently</option></select>
+<label>After disagreement, are you usually able to reconnect?</label><select name="reconnect"><option>Usually</option><option>Sometimes</option><option>Rarely</option></select><div id="conflictPatterns"></div></div>
+
+<div class="card"><h2>Relationship Strengths</h2><p class="small">Choose up to three.</p><div id="strengths"></div></div>
+<div class="card"><h2>Couple Goals</h2><p class="small">Choose up to three.</p><div id="coupleGoals"></div></div>
+
+<div class="card private"><h2>🔐 Private Safety Screen</h2><p class="notice">This section is physician-only. It must never appear in a shared Couple Alignment Report.</p>
+<label>Do you currently feel safe with your partner?</label><select name="safe_partner"><option>Yes</option><option>Sometimes unsure</option><option>No</option><option>Prefer not to answer</option></select>
+<label>Have you experienced any of the following?</label><div id="safetyExperiences"></div>
+<label>Do you feel safe discussing relationship problems in front of your partner?</label><select name="safe_discussing"><option>Yes</option><option>Unsure</option><option>No</option></select></div>
+
+<div class="card"><h2>Individual Goals</h2><div id="individualGoals"></div></div>
+
+<div class="card"><p class="notice">This is an AI-assisted screening and wellness assessment. It does not diagnose a relationship disorder. Your physician/counsellor retains final clinical judgement.</p>
+<button class="btn" type="submit">SUBMIT CONFIDENTIAL ASSESSMENT</button><p id="status"></p></div>
+</form>
+
+<div id="done" class="card done hidden"><div style="font-size:70px;color:#7de1b4">✓</div><h2>AI Couple Wellness Scan™ Completed</h2>
+<p>Thank you for completing your confidential assessment.</p><p>If your partner is also participating, their questionnaire should be completed independently. Your physician can then review areas of shared strength, differing experiences and common priorities.</p>
+<p><b>Different answers do not mean that either partner is wrong or has a disorder.</b></p></div>
+
+<script>
+const BACKEND="https://script.google.com/macros/s/AKfycbwAFC547exE6OIR9Ms77c5SLwr0JdFjXnpBTAgbOqJicQ6SuWhIpbxT9NGqgBRNF3sJNA/exec";
+const q=s=>document.querySelector(s), qa=s=>[...document.querySelectorAll(s)];
+const params=new URLSearchParams(location.search); q("#patient").value=params.get("patient")||""; q("#last4").value=params.get("last4")||""; q("#token").value=params.get("token")||"";
+
+function checks(id,name,items,max=99){q(id).innerHTML=items.map(x=>`<label class="opt"><input type="checkbox" name="${name}" value="${x}">${x}</label>`).join(""); if(max<99){q(id).addEventListener("change",e=>{let c=[...q(id).querySelectorAll("input:checked")];if(c.length>max){e.target.checked=false;alert("Please choose up to "+max+".")}})}}
+checks("#concerns","main_concerns",["Communication","Emotional connection","Intimacy","Sexual satisfaction","Reduced affection","Trust","Frequent disagreements","Conflict resolution","Stress affecting relationship","Parenting/family pressure","Work-related pressure","Fertility-related stress","Sexual health problem","Different expectations","Relationship rebuilding","Preventive couple wellness","Other"],3);
+checks("#sexualFactors","sexual_factors",["Reduced desire","Erection difficulty","Ejaculatory concern","Vaginal dryness","Pain during intimacy","Difficulty with arousal","Orgasmic concern","Performance anxiety","Other","Prefer not to answer"]);
+checks("#stressors","stressors",["Work pressure","Financial stress","Parenting","Caring for relatives","Health problems","Sexual health","Fertility treatment","Pregnancy/postpartum changes","Sleep deprivation","Family interference/conflict","Lack of private time","Long-distance relationship","Major life transition","Bereavement","Other","None significant"]);
+checks("#conflictPatterns","conflict_patterns",["Raised voices","Withdrawal/silence","Repeated unresolved issues","Criticism","Defensiveness","Difficulty compromising","None","Other"]);
+checks("#strengths","strengths",["Friendship","Trust","Communication","Affection","Sexual intimacy","Mutual respect","Parenting","Shared values","Emotional support","Teamwork","Humour","Financial cooperation","Family commitment","Shared interests","Other"],3);
+checks("#coupleGoals","couple_goals",["Communication","Emotional connection","Affection","Sexual intimacy","Sexual communication","Conflict resolution","Trust","Quality time","Stress management","Fertility-related coping","Parenting teamwork","Understanding each other's needs","Relationship satisfaction","Other"],3);
+checks("#safetyExperiences","safety_experiences",["Fear of your partner","Threats","Physical harm","Sexual pressure/coercion","Forced sexual activity","Controlling behaviour","Significant financial control","Monitoring/isolation","None","Prefer not to answer"]);
+checks("#individualGoals","individual_goals",["Better understanding of our relationship","Better communication","Better intimacy","Less conflict","Improved sexual wellbeing","Better emotional connection","Help managing stress","Couple counselling","Individual support","Unsure","Other"]);
+let freq=["Less than weekly","About weekly","2–3 times/week","≥4 times/week","Variable","No current preference","Prefer not to answer"]; ["desired_frequency","current_frequency"].forEach(n=>q(`[name="${n}"]`).innerHTML='<option value="">Select</option>'+freq.map(x=>`<option>${x}</option>`).join(""));
+
+q("#form").addEventListener("submit",async e=>{
+ e.preventDefault(); let fd=new FormData(e.target), d={action:"submitCoupleWellnessScan",scan:"AI Couple Wellness Scan™"};
+ for(let [k,v] of fd){if(d[k]===undefined)d[k]=v;else d[k]=[].concat(d[k],v)}
+ let vals=qa(".scoreQ").map(x=>x.value===""?null:+x.value).filter(v=>v!==null);
+ d.couple_wellness_score=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)*10/vals.length):"";
+ q("#status").className="";q("#status").textContent="Submitting securely…";
+ try{
+  let r=await fetch(BACKEND,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)});
+  let t=await r.text(),j={};try{j=JSON.parse(t)}catch{}
+  if(!r.ok||j.status!=="success")throw Error(j.message||"Submission failed");
+  e.target.classList.add("hidden");q("#done").classList.remove("hidden");scrollTo(0,0);
+ }catch(err){q("#status").className="err";q("#status").textContent="Submission could not be completed. Please try again. If the problem continues, please inform the clinic."}
+});
+</script></main></body></html>

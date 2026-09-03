@@ -120,6 +120,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
           <option value="intimascan">IntimaScan™ AI</option>
           <option value="feminascan">FeminaScan™ AI</option>
               <option value="fertility">AI Fertility Scan™</option>
+          <option value="couple">AI Couple Wellness Scan™</option>
         </select>
         <div class="note">Choose the assessment recommended for this visit. Only currently active patient modules are shown.</div>
       </div>
@@ -257,7 +258,7 @@ document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
       // A physician-side preassignment (URL/localStorage) may override the patient-visible selector.
       const incoming = new URLSearchParams(location.search);
       const assignedScan = incoming.get("scan") || localStorage.getItem("empireAssignedAIScan") || document.getElementById("assignedScan").value;
-      if(!["intimascan","feminascan","fertility"].includes(assignedScan)) throw new Error("A valid active AI assessment must be selected.");
+      if(!["intimascan","feminascan","fertility","couple"].includes(assignedScan)) throw new Error("A valid active AI assessment must be selected.");
       const params = new URLSearchParams({
         scan: assignedScan,
         token,
@@ -265,7 +266,7 @@ document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
         last4
       });
       aiLink.href = AI_LAUNCHER_PAGE + "?" + params.toString();
-      const scanNames={intimascan:"IntimaScan™ AI",feminascan:"FeminaScan™ AI",fertility:"AI Fertility Scan™"};
+      const scanNames={intimascan:"IntimaScan™ AI",feminascan:"FeminaScan™ AI",fertility:"AI Fertility Scan™",couple:"AI Couple Wellness Scan™"};
       document.getElementById("aiAssessmentNote").textContent="Assigned assessment: "+scanNames[assignedScan]+". Your token, name and mobile last 4 will be carried forward automatically.";
       aiBlock.classList.remove("hidden");
     } else {
