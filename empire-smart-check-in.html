@@ -114,7 +114,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
       </select>
 
       <div id="aiScanField" class="hidden">
-        <label for="assignedScan">AI assessment</label>
+        <label for="assignedScan">Requested AI assessment</label>
         <select id="assignedScan" name="assignedScan">
           <option value="">Select assessment</option>
           <option value="intimascan">IntimaScan™ AI</option>
@@ -122,7 +122,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
               <option value="fertility">AI Fertility Scan™</option>
           <option value="couple">AI Couple Wellness Scan™</option>
         </select>
-        <div class="note">Choose the assessment recommended for this visit. Only currently active patient modules are shown.</div>
+        <div class="note">Select the assessment being requested. Access remains locked until the physician authorizes it.</div>
       </div>
 
       <label>
@@ -149,8 +149,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
       <a id="queueLink" class="btn primary queueBtn" href="empire-live-smart-queue-PRODUCTION.html">VIEW MY LIVE QUEUE →</a>
 
       <div id="aiAssessmentBlock" class="hidden" style="margin-top:12px">
-        <a id="aiAssessmentLink" class="btn" href="#">START ASSIGNED AI ASSESSMENT →</a>
-        <p class="note" id="aiAssessmentNote" style="margin-top:8px">Your assigned AI assessment will open securely. Your token, name and mobile last 4 will be carried forward automatically.</p>
+        <a id="aiAssessmentLink" class="btn" href="#" aria-disabled="true" style="pointer-events:none;opacity:.48">AWAITING PHYSICIAN AUTHORIZATION</a>
+        <p class="note" id="aiAssessmentNote" style="margin-top:8px">Your AI assessment request has been sent to the physician. This button will unlock only after physician authorization.</p>
+        <button id="checkAuthBtn" type="button" style="margin-top:8px" onclick="checkAssessmentAuthorization(true)">Check Authorization</button>
       </div>
 
       <p class="note">Your queue status is private and token-based. Keep this page or the Live Queue page available while you wait.</p>
@@ -197,6 +198,8 @@ function resetForm(){
   localStorage.removeItem("empireQueueToken");
   localStorage.removeItem("empireQueueLast4");
   localStorage.removeItem("empireQueueSavedAt");
+  localStorage.removeItem("empireRequestedAIScan");
+  if(authPollTimer){clearInterval(authPollTimer);authPollTimer=null;}
   document.getElementById("aiAssessmentBlock").classList.add("hidden");
   document.getElementById("aiAssessmentLink").removeAttribute("href");
 }
@@ -207,6 +210,51 @@ document.getElementById("visitReason").addEventListener("change", e=>{
   document.getElementById("assignedScan").required=isAI;
   if(!isAI) document.getElementById("assignedScan").value="";
 });
+
+let authPollTimer=null;
+const scanNames={intimascan:"IntimaScan™ AI",feminascan:"FeminaScan™ AI",fertility:"AI Fertility Scan™",couple:"AI Couple Wellness Scan™"};
+
+async function checkAssessmentAuthorization(showMessage=false){
+  const p=window.empireCurrentPatient || {
+    token:localStorage.getItem("empireQueueToken")||"",
+    last4:localStorage.getItem("empireQueueLast4")||"",
+    patient:""
+  };
+  if(!p.token || !p.last4) return;
+  try{
+    const r=await fetch(ENDPOINT,{method:"POST",cache:"no-store",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"assessmentStatus",token:p.token,last4:p.last4})});
+    const data=await r.json();
+    if(data.status!=="success") throw new Error(data.message||"Authorization status unavailable");
+    const link=document.getElementById("aiAssessmentLink");
+    const note=document.getElementById("aiAssessmentNote");
+    if(data.authorizationStatus==="AUTHORIZED" && scanNames[data.assignedScan]){
+      const params=new URLSearchParams({scan:data.assignedScan,token:p.token,patient:p.patient||document.getElementById("name").value.trim(),last4:p.last4});
+      link.href=AI_LAUNCHER_PAGE+"?"+params.toString();
+      link.removeAttribute("aria-disabled");
+      link.style.pointerEvents="auto";
+      link.style.opacity="1";
+      link.textContent="START AUTHORIZED AI ASSESSMENT →";
+      note.textContent="Physician authorized: "+scanNames[data.assignedScan]+" • "+(data.payment||"Authorized")+". You may now start the assessment.";
+      if(authPollTimer){clearInterval(authPollTimer);authPollTimer=null;}
+    }else{
+      link.removeAttribute("href");
+      link.setAttribute("aria-disabled","true");
+      link.style.pointerEvents="none";
+      link.style.opacity=".48";
+      link.textContent="AWAITING PHYSICIAN AUTHORIZATION";
+      if(showMessage) alert("Physician authorization is still pending.");
+    }
+  }catch(err){
+    console.error(err);
+    if(showMessage) alert("Unable to confirm authorization right now. Please try again.");
+  }
+}
+
+function startAuthorizationPolling(){
+  if(authPollTimer) clearInterval(authPollTimer);
+  checkAssessmentAuthorization(false);
+  authPollTimer=setInterval(()=>checkAssessmentAuthorization(false),5000);
+}
 
 document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
   e.preventDefault();
@@ -226,7 +274,8 @@ document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
     name: document.getElementById("name").value.trim(),
     last4,
     appointmentTime: document.getElementById("appointmentTime").value,
-    visitReason: document.getElementById("visitReason").value
+    visitReason: document.getElementById("visitReason").value,
+    assignedScan: document.getElementById("assignedScan").value
   };
 
   try{
@@ -249,26 +298,23 @@ document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
     document.getElementById("token").textContent = token;
     document.getElementById("queueLink").href = QUEUE_PAGE;
 
-    // AI Assessment handoff: no clinical data is placed in the URL.
-    // Only the minimum identifiers already collected at check-in are carried forward.
+    // V9.2.2 — AI Assessment remains locked until physician authorization.
     const aiBlock = document.getElementById("aiAssessmentBlock");
     const aiLink = document.getElementById("aiAssessmentLink");
     if(payload.visitReason === "AI Assessment"){
-      // Production handoff: never silently default an AI Assessment to a clinical module.
-      // A physician-side preassignment (URL/localStorage) may override the patient-visible selector.
-      const incoming = new URLSearchParams(location.search);
-      const assignedScan = incoming.get("scan") || localStorage.getItem("empireAssignedAIScan") || document.getElementById("assignedScan").value;
+      const assignedScan = String(data.assignedScan || payload.assignedScan || "").toLowerCase();
       if(!["intimascan","feminascan","fertility","couple"].includes(assignedScan)) throw new Error("A valid active AI assessment must be selected.");
-      const params = new URLSearchParams({
-        scan: assignedScan,
-        token,
-        patient: payload.name,
-        last4
-      });
-      aiLink.href = AI_LAUNCHER_PAGE + "?" + params.toString();
+      localStorage.setItem("empireRequestedAIScan", assignedScan);
+      aiLink.removeAttribute("href");
+      aiLink.setAttribute("aria-disabled","true");
+      aiLink.style.pointerEvents="none";
+      aiLink.style.opacity=".48";
+      aiLink.textContent="AWAITING PHYSICIAN AUTHORIZATION";
       const scanNames={intimascan:"IntimaScan™ AI",feminascan:"FeminaScan™ AI",fertility:"AI Fertility Scan™",couple:"AI Couple Wellness Scan™"};
-      document.getElementById("aiAssessmentNote").textContent="Assigned assessment: "+scanNames[assignedScan]+". Your token, name and mobile last 4 will be carried forward automatically.";
+      document.getElementById("aiAssessmentNote").textContent="Requested assessment: "+scanNames[assignedScan]+". Awaiting physician authorization. Your token, name and mobile last 4 will be carried forward only after approval.";
       aiBlock.classList.remove("hidden");
+      window.empireCurrentPatient={token, last4, patient:payload.name};
+      startAuthorizationPolling();
     } else {
       aiBlock.classList.add("hidden");
       aiLink.removeAttribute("href");
