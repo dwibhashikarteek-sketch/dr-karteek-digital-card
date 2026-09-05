@@ -46,6 +46,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 .note{font-size:12px;color:#9fb0a8;margin-top:8px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .hidden{display:none}
+.resumeBox{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.resumeHint{margin-top:10px;font-size:12px;color:#aebcb5}
 .success{text-align:center;padding:10px 0}
 .token{
   margin:18px auto 10px;width:max-content;min-width:160px;padding:14px 20px;border-radius:18px;
@@ -85,7 +87,27 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
         <button class="primary" onclick="chooseType('appointment')">Yes — I Have an Appointment</button>
         <button onclick="chooseType('walkin')">No — I Am a Walk-In</button>
       </div>
+      <div class="resumeBox">
+        <button id="resumeLastBtn" class="hidden" style="width:100%;margin-bottom:10px" onclick="resumeLastAssessment()">Resume My Last Assessment</button>
+        <button style="width:100%" onclick="openResumeForm()">Resume / Check My Assessment</button>
+        <div class="resumeHint">If you closed this page after check-in, use your E-token and mobile last 4 digits. A new token will not be created.</div>
+      </div>
     </div>
+
+    <form id="resumeForm" class="hidden" onsubmit="resumeAssessment(event)">
+      <div class="progress"><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
+      <h2>Resume My Assessment</h2>
+      <p>Enter the token issued at check-in and the last 4 digits of the same mobile number.</p>
+      <label for="resumeToken">E-token</label>
+      <input id="resumeToken" inputmode="text" autocomplete="off" maxlength="8" required placeholder="e.g. E006">
+      <label for="resumeLast4">Mobile last 4 digits</label>
+      <input id="resumeLast4" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" required placeholder="e.g. 8794">
+      <div class="row" style="margin-top:18px">
+        <button type="button" onclick="closeResumeForm()">Back</button>
+        <button type="submit" class="primary">Check & Resume</button>
+      </div>
+      <div class="note" style="margin-top:12px">For privacy, the token and mobile last 4 must match today’s check-in.</div>
+    </form>
     <form id="checkinForm" class="hidden">
       <div class="progress"><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
       <h2 id="formTitle">Check In</h2>
@@ -139,8 +161,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
 
     <div id="success" class="hidden success">
       <div class="progress"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
-      <h2>Check-In Successful</h2>
-      <p class="status">Your arrival has been registered ✓</p>
+      <h2 id="successTitle">Check-In Successful</h2>
+      <p class="status" id="successStatus">Your arrival has been registered ✓</p>
       <div class="token" id="token">—</div>
       <div class="quiet">
         There is no need to knock or call. Please remain in the waiting area.
@@ -176,6 +198,78 @@ const QUEUE_PAGE = "empire-live-smart-queue-PRODUCTION.html";
 const AI_LAUNCHER_PAGE = "empire-ai-assessment-launcher.html";
 let selectedType = "";
 
+function refreshResumeShortcut(){
+  const token=localStorage.getItem("empireQueueToken")||"";
+  const last4=localStorage.getItem("empireQueueLast4")||"";
+  const btn=document.getElementById("resumeLastBtn");
+  if(token && /^\d{4}$/.test(last4)){
+    btn.textContent="Resume "+token+" Assessment";
+    btn.classList.remove("hidden");
+  }else{
+    btn.classList.add("hidden");
+  }
+}
+
+function openResumeForm(){
+  document.getElementById("step1").classList.add("hidden");
+  document.getElementById("checkinForm").classList.add("hidden");
+  document.getElementById("resumeForm").classList.remove("hidden");
+  document.getElementById("resumeToken").value=(localStorage.getItem("empireQueueToken")||"").toUpperCase();
+  document.getElementById("resumeLast4").value=localStorage.getItem("empireQueueLast4")||"";
+}
+
+function closeResumeForm(){
+  document.getElementById("resumeForm").classList.add("hidden");
+  document.getElementById("step1").classList.remove("hidden");
+}
+
+function resumeLastAssessment(){
+  openResumeForm();
+  const token=localStorage.getItem("empireQueueToken")||"";
+  const last4=localStorage.getItem("empireQueueLast4")||"";
+  if(token && last4) document.getElementById("resumeForm").requestSubmit();
+}
+
+async function resumeAssessment(e){
+  e.preventDefault();
+  const token=String(document.getElementById("resumeToken").value||"").trim().toUpperCase();
+  const last4=String(document.getElementById("resumeLast4").value||"").replace(/\D/g,"").slice(-4);
+  if(!/^E\d{3,}$/.test(token)){alert("Please enter your valid E-token.");return;}
+  if(!/^\d{4}$/.test(last4)){alert("Please enter the same mobile last 4 digits used at check-in.");return;}
+  const btn=e.submitter;
+  if(btn){btn.disabled=true;btn.textContent="Checking…";}
+  try{
+    const r=await fetch(ENDPOINT,{method:"POST",cache:"no-store",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"resumeAssessment",token,last4})});
+    const data=await r.json();
+    if(data.status!=="success") throw new Error(data.message||"Unable to resume assessment");
+    if(!data.assignedScan || !scanNames[data.assignedScan]){
+      alert("No AI assessment request is attached to this token.");
+      return;
+    }
+    localStorage.setItem("empireQueueToken",token);
+    localStorage.setItem("empireQueueLast4",last4);
+    localStorage.setItem("empireQueueSavedAt",String(Date.now()));
+    localStorage.setItem("empireRequestedAIScan",data.assignedScan);
+    window.empireCurrentPatient={token,last4,patient:data.patient||""};
+    document.getElementById("resumeForm").classList.add("hidden");
+    document.getElementById("step1").classList.add("hidden");
+    document.getElementById("checkinForm").classList.add("hidden");
+    document.getElementById("token").textContent=token;
+    document.getElementById("queueLink").href=QUEUE_PAGE;
+    document.getElementById("successTitle").textContent="Assessment Recovered";
+    document.getElementById("successStatus").textContent="Your existing check-in has been restored ✓";
+    document.getElementById("aiAssessmentBlock").classList.remove("hidden");
+    document.getElementById("success").classList.remove("hidden");
+    applyAuthorizationState(data,true);
+    if(data.authorizationStatus!=="AUTHORIZED") startAuthorizationPolling();
+  }catch(err){
+    console.error(err);
+    alert("We could not restore that assessment. Check the token and mobile last 4, then try again.");
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent="Check & Resume";}
+  }
+}
+
 function chooseType(type){
   selectedType = type;
   document.getElementById("visitType").value = type;
@@ -193,6 +287,8 @@ function goBack(){
 
 function resetForm(){
   document.getElementById("checkinForm").reset();
+  document.getElementById("successTitle").textContent="Check-In Successful";
+  document.getElementById("successStatus").textContent="Your arrival has been registered ✓";
   document.getElementById("success").classList.add("hidden");
   document.getElementById("step1").classList.remove("hidden");
   localStorage.removeItem("empireQueueToken");
@@ -202,6 +298,7 @@ function resetForm(){
   if(authPollTimer){clearInterval(authPollTimer);authPollTimer=null;}
   document.getElementById("aiAssessmentBlock").classList.add("hidden");
   document.getElementById("aiAssessmentLink").removeAttribute("href");
+  refreshResumeShortcut();
 }
 
 document.getElementById("visitReason").addEventListener("change", e=>{
@@ -214,6 +311,34 @@ document.getElementById("visitReason").addEventListener("change", e=>{
 let authPollTimer=null;
 const scanNames={intimascan:"IntimaScan™ AI",feminascan:"FeminaScan™ AI",fertility:"AI Fertility Scan™",couple:"AI Couple Wellness Scan™"};
 
+function applyAuthorizationState(data,fromRecovery=false){
+  const p=window.empireCurrentPatient || {
+    token:localStorage.getItem("empireQueueToken")||"",
+    last4:localStorage.getItem("empireQueueLast4")||"",
+    patient:""
+  };
+  const link=document.getElementById("aiAssessmentLink");
+  const note=document.getElementById("aiAssessmentNote");
+  const scan=data.assignedScan||localStorage.getItem("empireRequestedAIScan")||"";
+  if(data.authorizationStatus==="AUTHORIZED" && scanNames[scan]){
+    const params=new URLSearchParams({scan,token:p.token,patient:data.patient||p.patient||"",last4:p.last4});
+    link.href=AI_LAUNCHER_PAGE+"?"+params.toString();
+    link.removeAttribute("aria-disabled");
+    link.style.pointerEvents="auto";
+    link.style.opacity="1";
+    link.textContent="START AUTHORIZED AI ASSESSMENT →";
+    note.textContent="Physician authorized: "+scanNames[scan]+" • "+(data.payment||"Authorized")+". You may now start the assessment.";
+    if(authPollTimer){clearInterval(authPollTimer);authPollTimer=null;}
+  }else{
+    link.removeAttribute("href");
+    link.setAttribute("aria-disabled","true");
+    link.style.pointerEvents="none";
+    link.style.opacity=".48";
+    link.textContent="AWAITING PHYSICIAN AUTHORIZATION";
+    note.textContent="Requested assessment: "+(scanNames[scan]||"AI Assessment")+". Awaiting physician authorization. No new token is required.";
+  }
+}
+
 async function checkAssessmentAuthorization(showMessage=false){
   const p=window.empireCurrentPatient || {
     token:localStorage.getItem("empireQueueToken")||"",
@@ -225,25 +350,8 @@ async function checkAssessmentAuthorization(showMessage=false){
     const r=await fetch(ENDPOINT,{method:"POST",cache:"no-store",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"assessmentStatus",token:p.token,last4:p.last4})});
     const data=await r.json();
     if(data.status!=="success") throw new Error(data.message||"Authorization status unavailable");
-    const link=document.getElementById("aiAssessmentLink");
-    const note=document.getElementById("aiAssessmentNote");
-    if(data.authorizationStatus==="AUTHORIZED" && scanNames[data.assignedScan]){
-      const params=new URLSearchParams({scan:data.assignedScan,token:p.token,patient:p.patient||document.getElementById("name").value.trim(),last4:p.last4});
-      link.href=AI_LAUNCHER_PAGE+"?"+params.toString();
-      link.removeAttribute("aria-disabled");
-      link.style.pointerEvents="auto";
-      link.style.opacity="1";
-      link.textContent="START AUTHORIZED AI ASSESSMENT →";
-      note.textContent="Physician authorized: "+scanNames[data.assignedScan]+" • "+(data.payment||"Authorized")+". You may now start the assessment.";
-      if(authPollTimer){clearInterval(authPollTimer);authPollTimer=null;}
-    }else{
-      link.removeAttribute("href");
-      link.setAttribute("aria-disabled","true");
-      link.style.pointerEvents="none";
-      link.style.opacity=".48";
-      link.textContent="AWAITING PHYSICIAN AUTHORIZATION";
-      if(showMessage) alert("Physician authorization is still pending.");
-    }
+    applyAuthorizationState(data,false);
+    if(data.authorizationStatus!=="AUTHORIZED" && showMessage) alert("Physician authorization is still pending.");
   }catch(err){
     console.error(err);
     if(showMessage) alert("Unable to confirm authorization right now. Please try again.");
@@ -295,6 +403,8 @@ document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
     localStorage.setItem("empireQueueSavedAt", String(Date.now()));
 
     document.getElementById("checkinForm").classList.add("hidden");
+    document.getElementById("successTitle").textContent="Check-In Successful";
+    document.getElementById("successStatus").textContent="Your arrival has been registered ✓";
     document.getElementById("token").textContent = token;
     document.getElementById("queueLink").href = QUEUE_PAGE;
 
@@ -329,6 +439,7 @@ document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
     btn.textContent = "Check In Now";
   }
 });
+refreshResumeShortcut();
 </script>
 </body>
 </html>
