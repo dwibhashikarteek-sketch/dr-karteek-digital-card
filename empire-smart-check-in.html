@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Empire Smart Check-In™ | Sri Venkateswara Empire AI Clinic</title>
+<title>Empire Smart Check-In™ V9.2.4 | Sri Venkateswara Empire AI Clinic</title>
 <style>
 :root{
   --bg:#061612; --bg2:#0b241d; --card:#0c1f1a; --gold:#d8b66a; --gold2:#f0d796;
@@ -77,6 +77,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
     <div class="badge">SRI VENKATESWARA EMPIRE AI CLINIC</div>
     <h1>Empire Smart Check-In™</h1>
     <div class="sub">Fast • Private • Reception-Free Arrival</div>
+    <div style="margin-top:6px;font-size:10px;color:#9fb0a8">V9.2.4 • Ryodoraku Integrated</div>
   </div>
   <div class="card">
     <div id="step1">
@@ -143,6 +144,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--gold)}
           <option value="feminascan">FeminaScan™ AI</option>
               <option value="fertility">AI Fertility Scan™</option>
           <option value="couple">AI Couple Wellness Scan™</option>
+          <option value="ryodoraku">Empire AI Ryodoraku™</option>
         </select>
         <div class="note">Select the assessment being requested. Access remains locked until the physician authorizes it.</div>
       </div>
@@ -309,7 +311,7 @@ document.getElementById("visitReason").addEventListener("change", e=>{
 });
 
 let authPollTimer=null;
-const scanNames={intimascan:"IntimaScan™ AI",feminascan:"FeminaScan™ AI",fertility:"AI Fertility Scan™",couple:"AI Couple Wellness Scan™"};
+const scanNames={intimascan:"IntimaScan™ AI",feminascan:"FeminaScan™ AI",fertility:"AI Fertility Scan™",couple:"AI Couple Wellness Scan™",ryodoraku:"Empire AI Ryodoraku™"};
 
 function applyAuthorizationState(data,fromRecovery=false){
   const p=window.empireCurrentPatient || {
@@ -321,13 +323,22 @@ function applyAuthorizationState(data,fromRecovery=false){
   const note=document.getElementById("aiAssessmentNote");
   const scan=data.assignedScan||localStorage.getItem("empireRequestedAIScan")||"";
   if(data.authorizationStatus==="AUTHORIZED" && scanNames[scan]){
-    const params=new URLSearchParams({scan,token:p.token,patient:data.patient||p.patient||"",last4:p.last4});
-    link.href=AI_LAUNCHER_PAGE+"?"+params.toString();
-    link.removeAttribute("aria-disabled");
-    link.style.pointerEvents="auto";
-    link.style.opacity="1";
-    link.textContent="START AUTHORIZED AI ASSESSMENT →";
-    note.textContent="Physician authorized: "+scanNames[scan]+" • "+(data.payment||"Authorized")+". You may now start the assessment.";
+    if(scan==="ryodoraku"){
+      link.removeAttribute("href");
+      link.setAttribute("aria-disabled","true");
+      link.style.pointerEvents="none";
+      link.style.opacity=".82";
+      link.textContent="RYODORAKU AUTHORIZED — PHYSICIAN WILL START";
+      note.textContent="Physician authorized: "+scanNames[scan]+" • "+(data.payment||"Authorized")+". Please remain in the waiting area; the physician will start this clinical measurement.";
+    }else{
+      const params=new URLSearchParams({scan,token:p.token,patient:data.patient||p.patient||"",last4:p.last4});
+      link.href=AI_LAUNCHER_PAGE+"?"+params.toString();
+      link.removeAttribute("aria-disabled");
+      link.style.pointerEvents="auto";
+      link.style.opacity="1";
+      link.textContent="START AUTHORIZED AI ASSESSMENT →";
+      note.textContent="Physician authorized: "+scanNames[scan]+" • "+(data.payment||"Authorized")+". You may now start the assessment.";
+    }
     if(authPollTimer){clearInterval(authPollTimer);authPollTimer=null;}
   }else{
     link.removeAttribute("href");
@@ -413,14 +424,14 @@ document.getElementById("checkinForm").addEventListener("submit", async (e)=>{
     const aiLink = document.getElementById("aiAssessmentLink");
     if(payload.visitReason === "AI Assessment"){
       const assignedScan = String(data.assignedScan || payload.assignedScan || "").toLowerCase();
-      if(!["intimascan","feminascan","fertility","couple"].includes(assignedScan)) throw new Error("A valid active AI assessment must be selected.");
+      if(!["intimascan","feminascan","fertility","couple","ryodoraku"].includes(assignedScan)) throw new Error("A valid active AI assessment must be selected.");
       localStorage.setItem("empireRequestedAIScan", assignedScan);
       aiLink.removeAttribute("href");
       aiLink.setAttribute("aria-disabled","true");
       aiLink.style.pointerEvents="none";
       aiLink.style.opacity=".48";
       aiLink.textContent="AWAITING PHYSICIAN AUTHORIZATION";
-      const scanNames={intimascan:"IntimaScan™ AI",feminascan:"FeminaScan™ AI",fertility:"AI Fertility Scan™",couple:"AI Couple Wellness Scan™"};
+      const scanNames={intimascan:"IntimaScan™ AI",feminascan:"FeminaScan™ AI",fertility:"AI Fertility Scan™",couple:"AI Couple Wellness Scan™",ryodoraku:"Empire AI Ryodoraku™"};
       document.getElementById("aiAssessmentNote").textContent="Requested assessment: "+scanNames[assignedScan]+". Awaiting physician authorization. Your token, name and mobile last 4 will be carried forward only after approval.";
       aiBlock.classList.remove("hidden");
       window.empireCurrentPatient={token, last4, patient:payload.name};
