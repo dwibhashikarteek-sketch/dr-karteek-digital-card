@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071a14">
+<title>Botanical Integrative Care | Sri Venkateswara Empire AI Clinic</title>
+<style>
+:root{--gold:#d8b25f;--gold2:#f0d58e;--text:#f8f5ea;--line:rgba(216,178,95,.28)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at 15% 5%,rgba(28,92,67,.32),transparent 30%),linear-gradient(180deg,#040705,#09110d 55%,#030504);color:var(--text)}
+.wrap{max-width:620px;margin:0 auto;min-height:100vh;padding:18px 14px 36px}
+.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(8,17,13,.98),rgba(4,8,6,.99));border-radius:28px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.46)}
+.hero{padding:28px 20px 23px;text-align:center;border-bottom:1px solid var(--line)}
+.kicker{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold2);font-weight:800}
+h1{font-family:Georgia,serif;color:#fff7df;font-size:29px;line-height:1.08;margin:8px 0 7px}
+.tag{font-size:14px;color:#e7dec6;font-style:italic} main{padding:18px}
+.back,.book{display:flex;align-items:center;justify-content:center;min-height:49px;border-radius:14px;text-decoration:none;font-weight:750;margin-bottom:9px;border:1px solid rgba(240,213,142,.42)}
+.back{color:#fff;background:linear-gradient(180deg,#124a37,#0b2e23)} .book{background:linear-gradient(180deg,#c79b44,#9a722c);color:#120f09}
+.intro{font-size:13px;line-height:1.55;color:#ddd6c7;text-align:center;margin:15px 3px}
+.search{width:100%;padding:14px 15px;border-radius:14px;border:1px solid var(--line);background:#07100c;color:#fff;font:inherit;outline:none}
+.count{font-size:11px;color:#bdb6a8;margin:8px 2px 12px}
+.alpha{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.alpha button{border:1px solid rgba(216,178,95,.28);background:#0d2b20;color:#eee4ce;border-radius:9px;padding:6px 8px;cursor:pointer}
+.alpha button.all{color:#120f09;background:var(--gold)}
+.list{display:grid;gap:7px}
+.condition{display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:center;padding:10px 12px;border:1px solid rgba(216,178,95,.18);border-radius:13px;background:rgba(255,255,255,.025);font-size:13px;color:#eee8db}
+.letter{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(13,63,47,.55);color:var(--gold2);font-weight:800}
+.empty{display:none;text-align:center;padding:25px;color:#bbb3a4}
+.note{font-size:11px;line-height:1.55;color:#aaa396;text-align:center;margin:20px 4px 2px;padding-top:16px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body><div class="wrap"><div class="card">
+<div class="hero"><div class="kicker">Sri Venkateswara Empire AI Clinic</div><h1>Botanical Integrative Care</h1><div class="tag">Accessible • Personalized • Physician-Led</div></div>
+<main>
+<a class="back" href="index.html">← Back to Digital Visiting Card</a>
+<a class="book" href="https://calendar.app.google/ZHxvLVNKwEupZSoU6" target="_blank" rel="noopener">📅 Book Consultation</a>
+<div class="intro"><strong>Conditions &amp; Wellness Concerns A–Z</strong><br>Explore areas for which patients may seek consultation and individualized supportive care.</div>
+<input id="search" class="search" type="search" placeholder="🔎 Search conditions…" oninput="filterText()">
+<div class="count" id="count"></div>
+<div class="alpha" id="alpha"></div>
+<div class="list"><div class="condition" data-name="acne"><span class="letter">A</span><span>Acne</span></div>
+<div class="condition" data-name="addison&#x27;s disease"><span class="letter">A</span><span>Addison&#x27;s Disease</span></div>
+<div class="condition" data-name="adenoviruses"><span class="letter">A</span><span>Adenoviruses</span></div>
+<div class="condition" data-name="alcoholism"><span class="letter">A</span><span>Alcoholism</span></div>
+<div class="condition" data-name="alopecia"><span class="letter">A</span><span>Alopecia</span></div>
+<div class="condition" data-name="alopecia areata"><span class="letter">A</span><span>Alopecia Areata</span></div>
+<div class="condition" data-name="amenorrhea"><span class="letter">A</span><span>Amenorrhea</span></div>
+<div class="condition" data-name="amyloidosis"><span class="letter">A</span><span>Amyloidosis</span></div>
+<div class="condition" data-name="anemia"><span class="letter">A</span><span>Anemia</span></div>
+<div class="condition" data-name="angina"><span class="letter">A</span><span>Angina</span></div>
+<div class="condition" data-name="ankylosing spondylitis"><span class="letter">A</span><span>Ankylosing Spondylitis</span></div>
+<div class="condition" data-name="anorexia"><span class="letter">A</span><span>Anorexia</span></div>
+<div class="condition" data-name="anxiety"><span class="letter">A</span><span>Anxiety</span></div>
+<div class="condition" data-name="appendicitis"><span class="letter">A</span><span>Appendicitis</span></div>
+<div class="condition" data-name="arteriosclerosis"><span class="letter">A</span><span>Arteriosclerosis</span></div>
+<div class="condition" data-name="asthma"><span class="letter">A</span><span>Asthma</span></div>
+<div class="condition" data-name="atrial fibrillation"><span class="letter">A</span><span>Atrial Fibrillation</span></div>
+<div class="condition" data-name="avascular necrosis"><span class="letter">A</span><span>Avascular Necrosis</span></div>
+<div class="condition" data-name="back pain"><span class="letter">B</span><span>Back Pain</span></div>
+<div class="condition" data-name="bacterial vaginosis"><span class="letter">B</span><span>Bacterial Vaginosis</span></div>
+<div class="condition" data-name="bed wetting (nocturnal enuresis)"><span class="letter">B</span><span>Bed Wetting (Nocturnal Enuresis)</span></div>
+<div class="condition" data-name="bell&#x27;s palsy"><span class="letter">B</span><span>Bell&#x27;s Palsy</span></div>
+<div class="condition" data-name="beriberi"><span class="letter">B</span><span>Beriberi</span></div>
+<div class="condition" data-name="blepharitis"><span class="letter">B</span><span>Blepharitis</span></div>
+<div class="condition" data-name="brain tumour"><span class="letter">B</span><span>Brain Tumour</span></div>
+<div class="condition" data-name="bronchitis"><span class="letter">B</span><span>Bronchitis</span></div>
+<div class="condition" data-name="carpal tunnel syndrome"><span class="letter">C</span><span>Carpal Tunnel Syndrome</span></div>
+<div class="condition" data-name="cataract"><span class="letter">C</span><span>Cataract</span></div>
+<div class="condition" data-name="celiac disease"><span class="letter">C</span><span>Celiac Disease</span></div>
+<div class="condition" data-name="cellulitis"><span class="letter">C</span><span>Cellulitis</span></div>
+<div class="condition" data-name="cervical spondylosis"><span class="letter">C</span><span>Cervical Spondylosis</span></div>
+<div class="condition" data-name="cervicitis"><span class="letter">C</span><span>Cervicitis</span></div>
+<div class="condition" data-name="chickenpox"><span class="letter">C</span><span>Chickenpox</span></div>
+<div class="condition" data-name="chikungunya"><span class="letter">C</span><span>Chikungunya</span></div>
+<div class="condition" data-name="chilblains"><span class="letter">C</span><span>Chilblains</span></div>
+<div class="condition" data-name="cholecystitis"><span class="letter">C</span><span>Cholecystitis</span></div>
+<div class="condition" data-name="cholera"><span class="letter">C</span><span>Cholera</span></div>
+<div class="condition" data-name="chronic kidney disease"><span class="letter">C</span><span>Chronic Kidney Disease</span></div>
+<div class="condition" data-name="cirrhosis of liver"><span class="letter">C</span><span>Cirrhosis of Liver</span></div>
+<div class="condition" data-name="colic"><span class="letter">C</span><span>Colic</span></div>
+<div class="condition" data-name="common cold"><span class="letter">C</span><span>Common Cold</span></div>
+<div class="condition" data-name="constipation"><span class="letter">C</span><span>Constipation</span></div>
+<div class="condition" data-name="copd"><span class="letter">C</span><span>COPD</span></div>
+<div class="condition" data-name="coronary artery disease"><span class="letter">C</span><span>Coronary Artery Disease</span></div>
+<div class="condition" data-name="crohn&#x27;s disease"><span class="letter">C</span><span>Crohn&#x27;s Disease</span></div>
+<div class="condition" data-name="dandruff"><span class="letter">D</span><span>Dandruff</span></div>
+<div class="condition" data-name="deep vein thrombosis"><span class="letter">D</span><span>Deep Vein Thrombosis</span></div>
+<div class="condition" data-name="dehydration"><span class="letter">D</span><span>Dehydration</span></div>
+<div class="condition" data-name="delirium"><span class="letter">D</span><span>Delirium</span></div>
+<div class="condition" data-name="dengue"><span class="letter">D</span><span>Dengue</span></div>
+<div class="condition" data-name="dermatitis"><span class="letter">D</span><span>Dermatitis</span></div>
+<div class="condition" data-name="diarrhea"><span class="letter">D</span><span>Diarrhea</span></div>
+<div class="condition" data-name="diphtheria"><span class="letter">D</span><span>Diphtheria</span></div>
+<div class="condition" data-name="down syndrome"><span class="letter">D</span><span>Down Syndrome</span></div>
+<div class="condition" data-name="dysphagia"><span class="letter">D</span><span>Dysphagia</span></div>
+<div class="condition" data-name="ear infection / otitis media"><span class="letter">E</span><span>Ear Infection / Otitis Media</span></div>
+<div class="condition" data-name="edema / anasarca"><span class="letter">E</span><span>Edema / Anasarca</span></div>
+<div class="condition" data-name="emphysema"><span class="letter">E</span><span>Emphysema</span></div>
+<div class="condition" data-name="encephalitis"><span class="letter">E</span><span>Encephalitis</span></div>
+<div class="condition" data-name="endocarditis"><span class="letter">E</span><span>Endocarditis</span></div>
+<div class="condition" data-name="endometriosis"><span class="letter">E</span><span>Endometriosis</span></div>
+<div class="condition" data-name="erectile dysfunction"><span class="letter">E</span><span>Erectile Dysfunction</span></div>
+<div class="condition" data-name="escherichia coli (e. coli)"><span class="letter">E</span><span>Escherichia coli (E. coli)</span></div>
+<div class="condition" data-name="esophagitis"><span class="letter">E</span><span>Esophagitis</span></div>
+<div class="condition" data-name="eye floaters"><span class="letter">E</span><span>Eye Floaters</span></div>
+<div class="condition" data-name="eyestrain"><span class="letter">E</span><span>Eyestrain</span></div>
+<div class="condition" data-name="fever"><span class="letter">F</span><span>Fever</span></div>
+<div class="condition" data-name="food allergy"><span class="letter">F</span><span>Food Allergy</span></div>
+<div class="condition" data-name="food poisoning"><span class="letter">F</span><span>Food Poisoning</span></div>
+<div class="condition" data-name="gallstones"><span class="letter">G</span><span>Gallstones</span></div>
+<div class="condition" data-name="ganglion cysts"><span class="letter">G</span><span>Ganglion Cysts</span></div>
+<div class="condition" data-name="gangrene"><span class="letter">G</span><span>Gangrene</span></div>
+<div class="condition" data-name="gastritis"><span class="letter">G</span><span>Gastritis</span></div>
+<div class="condition" data-name="genital herpes"><span class="letter">G</span><span>Genital Herpes</span></div>
+<div class="condition" data-name="genital warts"><span class="letter">G</span><span>Genital Warts</span></div>
+<div class="condition" data-name="gilbert syndrome"><span class="letter">G</span><span>Gilbert Syndrome</span></div>
+<div class="condition" data-name="gingivitis"><span class="letter">G</span><span>Gingivitis</span></div>
+<div class="condition" data-name="glaucoma"><span class="letter">G</span><span>Glaucoma</span></div>
+<div class="condition" data-name="goiter"><span class="letter">G</span><span>Goiter</span></div>
+<div class="condition" data-name="gonorrhea"><span class="letter">G</span><span>Gonorrhea</span></div>
+<div class="condition" data-name="h. pylori"><span class="letter">H</span><span>H. pylori</span></div>
+<div class="condition" data-name="headaches"><span class="letter">H</span><span>Headaches</span></div>
+<div class="condition" data-name="heartburn"><span class="letter">H</span><span>Heartburn</span></div>
+<div class="condition" data-name="heatstroke"><span class="letter">H</span><span>Heatstroke</span></div>
+<div class="condition" data-name="hemangioma"><span class="letter">H</span><span>Hemangioma</span></div>
+<div class="condition" data-name="hematuria"><span class="letter">H</span><span>Hematuria</span></div>
+<div class="condition" data-name="hemophilia"><span class="letter">H</span><span>Hemophilia</span></div>
+<div class="condition" data-name="hemorrhoids"><span class="letter">H</span><span>Hemorrhoids</span></div>
+<div class="condition" data-name="hepatitis a"><span class="letter">H</span><span>Hepatitis A</span></div>
+<div class="condition" data-name="hepatitis b"><span class="letter">H</span><span>Hepatitis B</span></div>
+<div class="condition" data-name="hepatitis c"><span class="letter">H</span><span>Hepatitis C</span></div>
+<div class="condition" data-name="herpes zoster"><span class="letter">H</span><span>Herpes Zoster</span></div>
+<div class="condition" data-name="hiatus hernia"><span class="letter">H</span><span>Hiatus Hernia</span></div>
+<div class="condition" data-name="hiccups"><span class="letter">H</span><span>Hiccups</span></div>
+<div class="condition" data-name="high blood pressure (hypertension)"><span class="letter">H</span><span>High Blood Pressure (Hypertension)</span></div>
+<div class="condition" data-name="high cholesterol"><span class="letter">H</span><span>High Cholesterol</span></div>
+<div class="condition" data-name="hiv/aids"><span class="letter">H</span><span>HIV/AIDS</span></div>
+<div class="condition" data-name="hydrocele"><span class="letter">H</span><span>Hydrocele</span></div>
+<div class="condition" data-name="hydronephrosis"><span class="letter">H</span><span>Hydronephrosis</span></div>
+<div class="condition" data-name="hyperthyroidism"><span class="letter">H</span><span>Hyperthyroidism</span></div>
+<div class="condition" data-name="hypothyroidism"><span class="letter">H</span><span>Hypothyroidism</span></div>
+<div class="condition" data-name="infertility"><span class="letter">I</span><span>Infertility</span></div>
+<div class="condition" data-name="inguinal hernia"><span class="letter">I</span><span>Inguinal Hernia</span></div>
+<div class="condition" data-name="insomnia"><span class="letter">I</span><span>Insomnia</span></div>
+<div class="condition" data-name="irritable bowel syndrome"><span class="letter">I</span><span>Irritable Bowel Syndrome</span></div>
+<div class="condition" data-name="jaundice"><span class="letter">J</span><span>Jaundice</span></div>
+<div class="condition" data-name="jock itch (tinea cruris)"><span class="letter">J</span><span>Jock Itch (Tinea Cruris)</span></div>
+<div class="condition" data-name="keloid scar"><span class="letter">K</span><span>Keloid Scar</span></div>
+<div class="condition" data-name="kidney stones"><span class="letter">K</span><span>Kidney Stones</span></div>
+<div class="condition" data-name="laryngitis"><span class="letter">L</span><span>Laryngitis</span></div>
+<div class="condition" data-name="lichen planus"><span class="letter">L</span><span>Lichen Planus</span></div>
+<div class="condition" data-name="lipoma"><span class="letter">L</span><span>Lipoma</span></div>
+<div class="condition" data-name="low sperm count (oligospermia)"><span class="letter">L</span><span>Low Sperm Count (Oligospermia)</span></div>
+<div class="condition" data-name="lupus"><span class="letter">L</span><span>Lupus</span></div>
+<div class="condition" data-name="lymphadenitis"><span class="letter">L</span><span>Lymphadenitis</span></div>
+<div class="condition" data-name="lymphoma"><span class="letter">L</span><span>Lymphoma</span></div>
+<div class="condition" data-name="malaria"><span class="letter">M</span><span>Malaria</span></div>
+<div class="condition" data-name="mastitis"><span class="letter">M</span><span>Mastitis</span></div>
+<div class="condition" data-name="measles"><span class="letter">M</span><span>Measles</span></div>
+<div class="condition" data-name="migraine"><span class="letter">M</span><span>Migraine</span></div>
+<div class="condition" data-name="multiple sclerosis"><span class="letter">M</span><span>Multiple Sclerosis</span></div>
+<div class="condition" data-name="mumps"><span class="letter">M</span><span>Mumps</span></div>
+<div class="condition" data-name="muscle cramp"><span class="letter">M</span><span>Muscle Cramp</span></div>
+<div class="condition" data-name="muscular dystrophy"><span class="letter">M</span><span>Muscular Dystrophy</span></div>
+<div class="condition" data-name="myasthenia gravis"><span class="letter">M</span><span>Myasthenia Gravis</span></div>
+<div class="condition" data-name="myocarditis"><span class="letter">M</span><span>Myocarditis</span></div>
+<div class="condition" data-name="nail fungus"><span class="letter">N</span><span>Nail Fungus</span></div>
+<div class="condition" data-name="nasal polyps"><span class="letter">N</span><span>Nasal Polyps</span></div>
+<div class="condition" data-name="nephrotic syndrome"><span class="letter">N</span><span>Nephrotic Syndrome</span></div>
+<div class="condition" data-name="ocd"><span class="letter">O</span><span>OCD</span></div>
+<div class="condition" data-name="optic neuritis"><span class="letter">O</span><span>Optic Neuritis</span></div>
+<div class="condition" data-name="orchitis"><span class="letter">O</span><span>Orchitis</span></div>
+<div class="condition" data-name="osteoarthritis"><span class="letter">O</span><span>Osteoarthritis</span></div>
+<div class="condition" data-name="osteomyelitis"><span class="letter">O</span><span>Osteomyelitis</span></div>
+<div class="condition" data-name="osteoporosis"><span class="letter">O</span><span>Osteoporosis</span></div>
+<div class="condition" data-name="ovarian cysts"><span class="letter">O</span><span>Ovarian Cysts</span></div>
+<div class="condition" data-name="pancreatitis"><span class="letter">P</span><span>Pancreatitis</span></div>
+<div class="condition" data-name="parkinson&#x27;s disease"><span class="letter">P</span><span>Parkinson&#x27;s Disease</span></div>
+<div class="condition" data-name="pcod / pcos"><span class="letter">P</span><span>PCOD / PCOS</span></div>
+<div class="condition" data-name="pelvic inflammatory disease (pid)"><span class="letter">P</span><span>Pelvic Inflammatory Disease (PID)</span></div>
+<div class="condition" data-name="peptic ulcers"><span class="letter">P</span><span>Peptic Ulcers</span></div>
+<div class="condition" data-name="pericarditis"><span class="letter">P</span><span>Pericarditis</span></div>
+<div class="condition" data-name="peritonitis"><span class="letter">P</span><span>Peritonitis</span></div>
+<div class="condition" data-name="pilonidal cyst"><span class="letter">P</span><span>Pilonidal Cyst</span></div>
+<div class="condition" data-name="pityriasis rosea"><span class="letter">P</span><span>Pityriasis Rosea</span></div>
+<div class="condition" data-name="plantar fasciitis"><span class="letter">P</span><span>Plantar Fasciitis</span></div>
+<div class="condition" data-name="pneumonia"><span class="letter">P</span><span>Pneumonia</span></div>
+<div class="condition" data-name="premature ejaculation"><span class="letter">P</span><span>Premature Ejaculation</span></div>
+<div class="condition" data-name="prolapsed uterus"><span class="letter">P</span><span>Prolapsed Uterus</span></div>
+<div class="condition" data-name="psoriasis"><span class="letter">P</span><span>Psoriasis</span></div>
+<div class="condition" data-name="rheumatoid arthritis"><span class="letter">R</span><span>Rheumatoid Arthritis</span></div>
+<div class="condition" data-name="ringworm"><span class="letter">R</span><span>Ringworm</span></div>
+<div class="condition" data-name="schizophrenia"><span class="letter">S</span><span>Schizophrenia</span></div>
+<div class="condition" data-name="sciatica"><span class="letter">S</span><span>Sciatica</span></div>
+<div class="condition" data-name="sepsis"><span class="letter">S</span><span>Sepsis</span></div>
+<div class="condition" data-name="sore throat"><span class="letter">S</span><span>Sore Throat</span></div>
+<div class="condition" data-name="stye"><span class="letter">S</span><span>Stye</span></div>
+<div class="condition" data-name="typhoid fever"><span class="letter">T</span><span>Typhoid Fever</span></div>
+<div class="condition" data-name="ulcerative colitis"><span class="letter">U</span><span>Ulcerative Colitis</span></div>
+<div class="condition" data-name="urinary incontinence"><span class="letter">U</span><span>Urinary Incontinence</span></div>
+<div class="condition" data-name="vaginitis"><span class="letter">V</span><span>Vaginitis</span></div>
+<div class="condition" data-name="varicose veins"><span class="letter">V</span><span>Varicose Veins</span></div>
+<div class="condition" data-name="warts"><span class="letter">W</span><span>Warts</span></div></div>
+<div class="empty" id="empty">No matching condition found.</div>
+<div class="note">This directory is informational and does not imply that every listed condition is suitable for botanical care alone. Diagnosis, treatment and referral depend on individual clinical assessment. Urgent or serious conditions require appropriate medical care.</div>
+</main></div></div>
+<script>
+const items=[...document.querySelectorAll('.condition')], count=document.getElementById('count'), alpha=document.getElementById('alpha'), empty=document.getElementById('empty');
+function update(){const n=items.filter(x=>x.style.display!=='none').length;count.textContent=n+' conditions listed';empty.style.display=n?'none':'block'}
+function showAll(){document.getElementById('search').value='';items.forEach(x=>x.style.display='grid');update()}
+let all=document.createElement('button');all.textContent='ALL';all.className='all';all.onclick=showAll;alpha.appendChild(all);
+'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(L=>{let b=document.createElement('button');b.textContent=L;b.onclick=()=>{document.getElementById('search').value='';items.forEach(x=>x.style.display=x.textContent.trim().toUpperCase().startsWith(L)?'grid':'none');update()};alpha.appendChild(b)});
+function filterText(){let q=document.getElementById('search').value.toLowerCase().trim();items.forEach(x=>x.style.display=x.dataset.name.includes(q)?'grid':'none');update()}
+update();
+</script></body></html>
