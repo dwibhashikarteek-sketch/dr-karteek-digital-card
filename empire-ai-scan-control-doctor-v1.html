@@ -31,5 +31,14 @@ footer{text-align:center;color:#69736d;font-size:9px;letter-spacing:.12em;paddin
 <script>
 const base="https://dwibhashikarteek-sketch.github.io/dr-karteek-digital-card/";
 const toast=document.getElementById("toast");
-document.querySelectorAll(".card").forEach(b=>b.onclick=()=>{if(b.classList.contains("disabled")){toast.textContent="Module not yet integrated";toast.classList.add("on");setTimeout(()=>toast.classList.remove("on"),1600);return} location.href=base+b.dataset.url});
+  const params = new URLSearchParams(window.location.search);
+const tokenParam = params.get("token") || "";
+const last4Param = params.get("last4") || "";
+
+const tokenInput = document.getElementById("token");
+const last4Input = document.getElementById("last4");
+
+if (tokenInput) tokenInput.value = tokenParam;
+if (last4Input) last4Input.value = last4Param;
+document.querySelectorAll(".card").forEach(b=>b.onclick=()=>{if(b.classList.contains("disabled")){toast.textContent="Module not yet integrated";toast.classList.add("on");setTimeout(()=>toast.classList.remove("on"),1600);return}const token=document.getElementById("token").value.trim();const last4=document.getElementById("last4").value.trim();const qs=new URLSearchParams();if(token)qs.set("token",token);if(last4)qs.set("last4",last4);location.href=base+b.dataset.url+(qs.toString()?"?"+qs.toString():"")});
 </script></body></html>
