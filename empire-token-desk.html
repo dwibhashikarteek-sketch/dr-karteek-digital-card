@@ -123,6 +123,7 @@ function render(items){
         <button onclick="setStatus('${x.token}','Waiting')">Waiting</button>
         <button class="primary" onclick="setStatus('${x.token}','In Consultation')">Call / In Consultation</button>
         <button onclick="setStatus('${x.token}','Completed')">Completed</button>
+       <button onclick="openAIScan('${x.token}','${x.last4}')">AI Scan</button> 
       </div>
     </div>
   `).join('');
@@ -142,6 +143,13 @@ async function setStatus(token,status){
 
 function escapeHtml(s){
   return String(s??"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+  function openAIScan(token,last4){
+  const url = 'empire-ai-scan-control-doctor-v1.html'
+    + '?token=' + encodeURIComponent(token)
+    + '&last4=' + encodeURIComponent(last4);
+  window.location.href = url;
 }
 </script>
 </body>
