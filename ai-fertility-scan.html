@@ -58,7 +58,7 @@
 </main>
 <script>
 const BACKEND='https://script.google.com/macros/s/AKfycbwAFC547exE6OIR9Ms77c5SLwr0JdFjXnpBTAgbOqJicQ6SuWhIpbxT9NGqgBRNF3sJNA/exec'; const q=s=>document.querySelector(s), qa=s=>[...document.querySelectorAll(s)];
-const u=new URLSearchParams(location.search); q("#patient").value=u.get("patient")||"";q("#last4").value=u.get("last4")||"";q("#token").value=u.get("token")||"";
+const u=new URLSearchParams(location.search);q("#patient").value=u.get("patient")||u.get("token")||""; ;q("#last4").value=u.get("last4")||"";q("#token").value=u.get("token")||"";
 function branch(){let v=q('[name="assessment_for"]').value;let f=v==="Female partner"||v==="Both partners / Couple";let m=v==="Male partner"||v==="Both partners / Couple";let c=v==="Both partners / Couple";qa(".female").forEach(x=>x.classList.toggle("hidden",!f));qa(".male").forEach(x=>x.classList.toggle("hidden",!m));qa(".couple").forEach(x=>x.classList.toggle("hidden",!c));}
 q('[name="assessment_for"]').addEventListener("change",branch);
 qa('#goals input').forEach(x=>x.addEventListener("change",e=>{if(qa('#goals input:checked').length>3){e.target.checked=false;alert("Please choose up to three fertility goals.");}}));
