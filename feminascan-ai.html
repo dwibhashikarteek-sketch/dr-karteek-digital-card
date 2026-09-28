@@ -250,7 +250,7 @@ document.querySelectorAll('input[name="goal"]').forEach(c=>c.addEventListener("c
  const token=p.get("token")||"", patient=p.get("patient")||"";
  const last4=(p.get("last4")||p.get("mobileLast4")||"").replace(/\D/g,"").slice(-4);
  if(token)document.getElementById("patientToken").value=token;
- if(patient)document.getElementById("patientName").value=patient;
+ if(patient || token)document.getElementById("patientName").value=patient || token;
  if(last4)document.getElementById("mobileLast4").value=last4;
 })();
 
