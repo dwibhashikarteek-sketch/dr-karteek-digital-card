@@ -1,7 +1,7 @@
 // Add the real links when your forms and private videos are ready.
 // Keep trainee lists, results, passwords and private Sheet links out of this file.
 window.EMPIRE_ACADEMY_LINKS = Object.freeze({
-  registration: '',
+  registration: 'https://docs.google.com/forms/d/e/1FAIpQLSddzJ5ZgZvwwgJTJYpsMWKWqjEBeH-M_uypa1isT4oPdHrPxA/viewform',
   assessment: 'https://docs.google.com/forms/d/e/1FAIpQLSdTN5-MZpJu2gOkhafKACDCeJPYvxIguStOrRzPGEFdSlJcWg/viewform',
   video1: 'https://youtu.be/vFsOwXEzcoU',
   video2: 'https://youtu.be/1lIh93gsYT8',
